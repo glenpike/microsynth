@@ -14,42 +14,36 @@ export const initialState = Immutable.fromJS({
 
 const synthControls = (state = initialState, action) => {
   switch (action.type) {
-    case NOTE_ON:
+    case NOTE_ON: {
       const { noteNum, velocity } = action;
       return state
-        .update('notesOn', (notesOn) => {
-          return notesOn.push({
+        .update('notesOn', notesOn =>
+          notesOn.push({
             noteNum,
             velocity,
-          });
-        })
-        .update('synthEvents', (synthEvents) => {
-          return synthEvents.push(action);
-        });
-    case NOTE_OFF:
+          }),
+        )
+        .update('synthEvents', synthEvents => synthEvents.push(action));
+    }
+    case NOTE_OFF: {
       return state
-        .update('notesOn', (notesOn) => {
-          return notesOn.filter((noteOn) => {
-            return noteOn.noteNum !== action.noteNum;
-          });
-        })
-        .update('synthEvents', (synthEvents) => {
-          return synthEvents.push(action);
-        });
-    case CONTROL_CHANGE:
+        .update('notesOn', notesOn =>
+          notesOn.filter(noteOn => noteOn.noteNum !== action.noteNum))
+        .update('synthEvents', synthEvents => synthEvents.push(action));
+    }
+    case CONTROL_CHANGE: {
       const { control, value } = action;
-      return state.update('controlValues', (controlValues) => {
-        return controlValues
+      return state.update('controlValues', controlValues =>
+        controlValues
           .push({
             control,
             value,
           })
-          .update('synthEvents', (synthEvents) => {
-            return synthEvents.push(action);
-          });
-      });
-    case CLEAR_EVENT_QUEUE:
+          .update('synthEvents', synthEvents => synthEvents.push(action)));
+    }
+    case CLEAR_EVENT_QUEUE: {
       return state.set('synthEvents', new Immutable.List());
+    }
     default:
       return state;
   }

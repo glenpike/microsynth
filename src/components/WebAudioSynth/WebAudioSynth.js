@@ -13,7 +13,7 @@ class WebAudioSynth extends Component {
   componentWillReceiveProps(props) {
     const { synthEvents } = props;
     if (synthEvents.length) {
-      synthEvents.forEach((event) => {
+      synthEvents.forEach(event => {
         this.processEvent(event);
       });
     }
@@ -35,10 +35,8 @@ class WebAudioSynth extends Component {
         break;
       case 'NOTE_OFF':
         this._playingNotes
-          .filter((note) => {
-            return note.key === event.key;
-          })
-          .forEach((note) => {
+          .filter(note => note.key === event.key)
+          .forEach(note => {
             note.osc.stop(this.audioContext.currentTime);
           });
         break;

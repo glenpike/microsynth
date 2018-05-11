@@ -21,8 +21,7 @@ const synthControls = (state = initialState, action) => {
           notesOn.push({
             noteNum,
             velocity,
-          }),
-        )
+          }))
         .update('synthEvents', synthEvents => synthEvents.push(action));
     }
     case NOTE_OFF: {

@@ -15,7 +15,6 @@ class WebAudioSynth extends Component {
   componentWillReceiveProps(props) {
     const { synthEvents } = props;
     if (synthEvents.length) {
-      console.log('will receive props')
       synthEvents.forEach(event => this.processEvent(event));
     }
     props.clearEventQueue();
@@ -26,12 +25,14 @@ class WebAudioSynth extends Component {
   }
 
   processEvent(event) {
+    const { controlValues } = this.props;
+
     switch (event.type) {
       case 'NOTE_ON': {
         const osc = this.audioContext.createOscillator();
         osc.frequency.value = noteNumberToFrequency(event.noteNum);
         osc.start(this.audioContext.currentTime);
-        osc.type = 'sawtooth';
+        osc.type = controlValues['oscillator-1'].shape; // hacky
         osc.connect(this.audioContext.destination);
         this.playingNotes.push({
           key: event.key,
@@ -46,7 +47,6 @@ class WebAudioSynth extends Component {
         break;
       }
       case 'CONTROL_CHANGE': {
-        console.log('control change ', event);  // Don't put shape changes in here.  Pass as props!
         this.playingNotes.forEach(({ osc }) => {
           osc.type = event.value; // eslint-disable-line no-param-reassign
         });
@@ -65,6 +65,7 @@ class WebAudioSynth extends Component {
 WebAudioSynth.propTypes = {
   clearEventQueue: PropTypes.func.isRequired,
   synthEvents: PropTypes.arrayOf(PropTypes.object).isRequired, // eslint-disable-line react/no-typos
+  controlValues: PropTypes.objectOf(PropTypes.any).isRequired, // eslint-disable-line react/no-typos
 };
 
 export default WebAudioSynth;

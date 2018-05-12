@@ -21,4 +21,6 @@ yarn-debug.log*
 yarn-error.log*
 
 # glen stuff
+*.css
+
 time.md

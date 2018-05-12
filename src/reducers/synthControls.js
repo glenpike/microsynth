@@ -8,7 +8,14 @@ import {
 
 export const initialState = Immutable.fromJS({
   notesOn: [], // TODO: handle channels?
-  controlValues: [],
+  controlValues: {
+    'oscillator-1': {
+      shape: 'sawtooth',
+    },
+    'oscillator-2': {
+      shape: 'sawtooth',
+    },
+  },
   synthEvents: [],
 });
 
@@ -31,13 +38,8 @@ const synthControls = (state = initialState, action) => {
         .update('synthEvents', synthEvents => synthEvents.push(action));
     }
     case CONTROL_CHANGE: {
-      const { control, value } = action;
-      return state.update('controlValues', controlValues =>
-        controlValues
-          .push({
-            control,
-            value,
-          }))
+      const { groupName, controlType, value } = action;
+      return state.setIn(['controlValues', groupName, controlType], value)
         .update('synthEvents', synthEvents => synthEvents.push(action));
     }
     case CLEAR_EVENT_QUEUE: {

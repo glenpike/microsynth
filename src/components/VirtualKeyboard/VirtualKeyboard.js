@@ -72,8 +72,7 @@ class VirtualKeyboard extends Component {
         {keyMap.map((k) => {
           const { number, label } = k;
           return (
-            <div
-              role="button"
+            <button
               tabIndex={number}
               className={`VirtualKeyboard__Key${
                 noteOnValues.indexOf(number) !== -1 ? '--down' : ''
@@ -81,9 +80,11 @@ class VirtualKeyboard extends Component {
               key={number}
               onMouseDown={e => this.onMouseDown(number, e)}
               onMouseUp={e => this.onMouseUp(number, e)}
+              onMouseOut={e => this.onMouseUp(number, e)}
+              onBlur={e => this.onMouseUp(number, e)}
             >
               {label}
-            </div>
+            </button>
           );
         })}
       </div>

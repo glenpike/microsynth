@@ -16,9 +16,10 @@ export const noteOff = (noteNum, channel = 1) => ({
   channel,
 });
 
-export const controlChange = (control, value, channel = 1) => ({
+export const controlChange = (groupName, controlType, value, channel = 1) => ({
   type: CONTROL_CHANGE,
-  control,
+  groupName,
+  controlType,
   value,
   channel,
 });

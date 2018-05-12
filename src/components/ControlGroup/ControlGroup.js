@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const ControlGroup = props => (
-  <div className="ControlGroup">
+  <div className="ControlGroup clear">
     {props.controls}
   </div>
 );

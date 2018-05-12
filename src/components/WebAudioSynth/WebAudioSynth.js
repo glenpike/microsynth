@@ -1,10 +1,9 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import ImmutablePropTypes from 'react-immutable-proptypes';
 
 // from https://github.com/danigb/midi-freq
 const noteNumberToFrequency = num =>
-  ((2 ** (num - 69)) / 12) * 440;
+  (2 ** ((num - 69) / 12)) * 440;
 
 class WebAudioSynth extends Component {
   componentWillMount() {
@@ -16,6 +15,7 @@ class WebAudioSynth extends Component {
   componentWillReceiveProps(props) {
     const { synthEvents } = props;
     if (synthEvents.length) {
+      console.log('will receive props')
       synthEvents.forEach(event => this.processEvent(event));
     }
     props.clearEventQueue();
@@ -45,6 +45,13 @@ class WebAudioSynth extends Component {
           .forEach(note => note.osc.stop(this.audioContext.currentTime));
         break;
       }
+      case 'CONTROL_CHANGE': {
+        console.log('control change ', event);  // Don't put shape changes in here.  Pass as props!
+        this.playingNotes.forEach(({ osc }) => {
+          osc.type = event.value; // eslint-disable-line no-param-reassign
+        });
+        break;
+      }
       default:
         break;
     }
@@ -57,7 +64,7 @@ class WebAudioSynth extends Component {
 
 WebAudioSynth.propTypes = {
   clearEventQueue: PropTypes.func.isRequired,
-  synthEvents: ImmutablePropTypes.map.isRequired, // eslint-disable-line react/no-typos
+  synthEvents: PropTypes.arrayOf(PropTypes.object).isRequired, // eslint-disable-line react/no-typos
 };
 
 export default WebAudioSynth;

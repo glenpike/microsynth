@@ -37,8 +37,8 @@ const synthControls = (state = initialState, action) => {
           .push({
             control,
             value,
-          })
-          .update('synthEvents', synthEvents => synthEvents.push(action)));
+          }))
+        .update('synthEvents', synthEvents => synthEvents.push(action));
     }
     case CLEAR_EVENT_QUEUE: {
       return state.set('synthEvents', new Immutable.List());

@@ -1,0 +1,13 @@
+.VirtualKeyboard {
+    @include block;
+    &__Key, &__Key--down{
+        float: left;
+        width: $baseLineHeight;
+        height: $baseLineHeight * 4;
+        background-color: $primaryHue;
+        border: 1px solid $altBackgroundColour;
+        &--down {
+            background-color: $secondaryHue;
+        }
+    }
+}

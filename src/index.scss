@@ -1,0 +1,79 @@
+$baseFontSize:   24px !default;
+$baseLineHeight: 36px !default;
+$baseFontFamily: sans-serif;
+$veryDarkTextColour: #0e0d0c;
+$darkTextColour: #292426;
+$mediumTextColour: #a39991;
+$lightTextColour: #e7e7e5;
+$backgroundColour: #292426;
+$altBackgroundColour: #474445;
+$primaryHue: #54c8bf;
+$secondaryHue: #a0a8e5;
+$tertiaryHue: #f084a4;
+$displayColour: #7fb514;
+$indicatorColour: #e33e51;
+
+@import 'css/_normalize';
+
+/* TOOLS */
+
+@mixin block () {
+  margin: $baseFontSize / 2;
+  padding: $baseFontSize / 2;
+  border: 1px solid $primaryHue;
+}
+
+/* ELEMENTS */
+*,
+input[type="search"] {
+  box-sizing: border-box;
+}
+
+html{
+  font: 400 1.5em/1.5 $baseFontFamily;
+}
+
+body {
+  color: $darkTextColour;
+  background: $veryDarkTextColour;
+}
+
+h1,h2,h3,h4,h5,h6,hgroup,
+ul,ol,dd,
+p,figure,
+pre,table,fieldset,hr{
+  margin-bottom: $baseLineHeight;
+  margin-bottom: 1.5rem;
+}
+
+ul {
+  list-style-type: none;
+}
+
+li {
+  margin-bottom: 0.25rem
+}
+
+/* OBJECTS */
+
+/* COMPONENTS */
+.button {
+  font-weight: 700;
+  padding: $baseFontSize / 4 $baseFontSize / 2;
+  background-color: $primaryHue;
+  border: 1px solid $primaryHue;
+  border-radius: $baseFontSize / 4;
+  color: $lightTextColour;
+}
+
+@import 'components/App/App';
+@import 'components/VirtualKeyboard/VirtualKeyboard';
+@import 'components/ControlGroup/ControlGroup';
+@import 'components/OscillatorControls/OscillatorControls';
+/* TRUMPS */
+
+.clear:after {
+  content: "";
+  display: table;
+  clear: both;
+}

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import ImmutablePropTypes from 'react-immutable-proptypes';
 
 const keyMap = [
   {
@@ -69,7 +68,7 @@ class VirtualKeyboard extends Component {
     const { notesOn } = this.props;
     const noteOnValues = notesOn.map(noteOn => noteOn.noteNum);
     return (
-      <div className="VirtualKeyboard">
+      <div className="VirtualKeyboard clear">
         {keyMap.map((k) => {
           const { number, label } = k;
           return (
@@ -77,7 +76,7 @@ class VirtualKeyboard extends Component {
               role="button"
               tabIndex={number}
               className={`VirtualKeyboard__Key${
-                noteOnValues.indexOf(number) !== -1 ? '__Down' : ''
+                noteOnValues.indexOf(number) !== -1 ? '--down' : ''
               }`}
               key={number}
               onMouseDown={e => this.onMouseDown(number, e)}
@@ -95,7 +94,7 @@ class VirtualKeyboard extends Component {
 VirtualKeyboard.propTypes = {
   noteOn: PropTypes.func.isRequired,
   noteOff: PropTypes.func.isRequired,
-  notesOn: ImmutablePropTypes.map.isRequired, // eslint-disable-line react/no-typos
+  notesOn: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 export default VirtualKeyboard;

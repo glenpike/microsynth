@@ -7,11 +7,11 @@ $mediumTextColour: #a39991;
 $lightTextColour: #e7e7e5;
 $backgroundColour: #292426;
 $altBackgroundColour: #474445;
-$primaryHue: #54c8bf;
+$primaryHue: #51dce6;
 $secondaryHue: #a0a8e5;
-$tertiaryHue: #f084a4;
+$tertiaryHue: #e494ac;
 $displayColour: #7fb514;
-$indicatorColour: #e33e51;
+$indicatorColour: #f0516b;
 
 @import 'css/_normalize';
 
@@ -70,6 +70,7 @@ li {
 @import 'components/VirtualKeyboard/VirtualKeyboard';
 @import 'components/ControlGroup/ControlGroup';
 @import 'components/OscillatorControls/OscillatorControls';
+@import 'components/RadioButton/RadioButton';
 /* TRUMPS */
 
 .clear:after {

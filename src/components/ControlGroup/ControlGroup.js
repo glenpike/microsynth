@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 
 const ControlGroup = props => (
   <div className="ControlGroup clear">
-    {props.controls}
+    {props.children}
   </div>
 );
 
 ControlGroup.propTypes = {
-  controls: PropTypes.arrayOf(PropTypes.node).isRequired,
+  children: PropTypes.arrayOf(PropTypes.node).isRequired,
 };
 
 export default ControlGroup;

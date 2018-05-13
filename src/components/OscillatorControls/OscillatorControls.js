@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ControlGroup from '../ControlGroup/ControlGroup';
+import RangeControl from '../RangeControl/RangeControl';
+import RadioButton from '../RadioButton/RadioButton';
 
 // TODO: this might need to be somewhere else?
 const waveTypes = [
@@ -22,48 +24,44 @@ const waveTypes = [
   },
 ];
 
-const WaveButton = (props) => {
-  const {
-    id, type: { label, value }, isChecked, onChange,
-  } = props;
-  const inputId = `WaveButton-${value}-${id}`;
-  return (
-    <div className="WaveButton">
-      <label className={`WaveButton__label${isChecked ? '--checked' : ''}`} htmlFor={inputId}>
-        <input className="WaveButton__radio" type="radio" id={inputId} onChange={onChange} name="wavebutton" value={value} checked={isChecked} />
-        {label}
-      </label>
-    </div>
-  );
-};
-
-WaveButton.propTypes = {
-  id: PropTypes.string.isRequired,
-  type: PropTypes.objectOf(PropTypes.any).isRequired,
-  onChange: PropTypes.func.isRequired,
-  isChecked: PropTypes.bool.isRequired,
-};
-
 class OscillatorControls extends Component {
   componentWillMount() {
   }
+  // TODO: combine these into a handler that returns a
+  // function which can be called in the event handler?
   onShapeChange(e) {
     const { controlChange, controlName } = this.props;
     controlChange(controlName, 'shape', e.target.value);
   }
+  onDetuneChange(e) {
+    const { controlChange, controlName } = this.props;
+    controlChange(controlName, 'detune', e.target.value / 100);
+  }
   render() {
     const { controlValues, label, controlName } = this.props;
-    const activeType = controlValues[controlName].shape;
-    const buttons = waveTypes.map(type => (
-      <WaveButton
-        key={`${type.value}-${controlName}`}
+    const { shape, detune } = controlValues[controlName];
+    const buttons = waveTypes.map(({ label: buttonLabel, value }) => (
+      <RadioButton
+        key={`${value}-${controlName}`}
         onChange={e => this.onShapeChange(e)}
-        type={type}
-        isChecked={type.value === activeType}
+        label={buttonLabel}
+        value={value}
+        isChecked={value === shape}
         id={controlName}
       />));
+
     return (
-      <ControlGroup label={label} controls={buttons} />
+      <ControlGroup label={label}>
+        {buttons}
+        <RangeControl
+          label="Detune"
+          controlName={`detune-${controlName}`}
+          onChange={e => this.onDetuneChange(e)}
+          value={detune * 100}
+          min="-100"
+          max="100"
+        />
+      </ControlGroup>
     );
   }
 }

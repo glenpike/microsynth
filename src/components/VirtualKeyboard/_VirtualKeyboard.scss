@@ -2,6 +2,7 @@
     @include block;
     &__Key, &__Key--down{
         color: $darkTextColour;
+        font-weight: bold;
         float: left;
         width: $baseLineHeight;
         height: $baseLineHeight * 4;

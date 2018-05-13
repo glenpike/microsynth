@@ -11,9 +11,29 @@ export const initialState = Immutable.fromJS({
   controlValues: {
     'oscillator-1': {
       shape: 'sawtooth',
+      detune: 0,
     },
     'oscillator-2': {
-      shape: 'sawtooth',
+      shape: 'square',
+      detune: 0,
+    },
+    modulation: {
+      type: 'ring',
+    },
+    filter: {
+      type: 'lowpass',
+      cutoff: 10000,
+      resonance: 0,
+    },
+    envelope: {
+      attack: 1,
+      decay: 10,
+      sustain: 75,
+      release: 50,
+    },
+    volume: {
+      level: 0.5,
+      pan: 0.0,
     },
   },
   synthEvents: [],

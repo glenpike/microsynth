@@ -1,0 +1,20 @@
+.RadioButton {
+    font-size: $baseFontSize / 1.5;
+    font-weight: bold;
+    text-transform: lowercase;
+    &__radio {
+        display: none;
+    }
+    &__label, &__label--checked{
+        float: left;
+        width: 100px;
+        margin: 0;
+        padding: 0 $baseFontSize / 4;
+        border: 1px solid $altBackgroundColour;
+        background-color: $primaryHue;
+        &--checked {
+            color: $lightTextColour;
+            background-color: $indicatorColour;
+        }
+    }
+}

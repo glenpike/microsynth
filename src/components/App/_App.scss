@@ -1,22 +1,18 @@
 .App {
-  text-align: center;
-}
-
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
+  text-align: left;
 }
 
 .App-header {
   background-color: $backgroundColour;
-  height: 150px;
-  padding: 20px;
-  color: $lightTextColour;
   border-bottom: $baseFontSize / 4 solid $altBackgroundColour;
+  padding-top: $baseFontSize / 4;
 }
 
 .App-title {
+  @include block;
   font-size: 1.5em;
+  color: $primaryHue;
+  text-shadow: 0 0 3px $primaryHue;
 }
 
 .App-intro {

@@ -4,9 +4,9 @@ import ControlGroup from '../ControlGroup/ControlGroup';
 import RangeControl from '../RangeControl/RangeControl';
 
 class EnvelopeControls extends Component {
-  onValueChange(e, param) {
+  onValueChange(value, param) {
     const { controlChange, controlName } = this.props;
-    controlChange(controlName, param, e.target.value);
+    controlChange(controlName, param, value);
   }
   render() {
     const { controlValues, label, controlName } = this.props;
@@ -17,30 +17,38 @@ class EnvelopeControls extends Component {
     // TODO: dry up...
     return (
       <ControlGroup label={label}>
-        <RangeControl
-          label="Attack"
-          controlName={`attack-${controlName}`}
-          onChange={e => this.onValueChange(e, 'attack')}
-          value={attack}
-        />
-        <RangeControl
-          label="Decay"
-          controlName={`decay-${controlName}`}
-          onChange={e => this.onValueChange(e, 'decay')}
-          value={decay}
-        />
-        <RangeControl
-          label="Sustain"
-          controlName={`sustain-${controlName}`}
-          onChange={e => this.onValueChange(e, 'sustain')}
-          value={sustain}
-        />
-        <RangeControl
-          label="Release"
-          controlName={`release-${controlName}`}
-          onChange={e => this.onValueChange(e, 'release')}
-          value={release}
-        />
+        <div className="column">
+          <RangeControl
+            label="Attack"
+            controlName={`attack-${controlName}`}
+            onChange={e => this.onValueChange(e, 'attack')}
+            value={attack}
+          />
+        </div>
+        <div className="column pad-left">
+          <RangeControl
+            label="Decay"
+            controlName={`decay-${controlName}`}
+            onChange={e => this.onValueChange(e, 'decay')}
+            value={decay}
+          />
+        </div>
+        <div className="column pad-left">
+          <RangeControl
+            label="Sustain"
+            controlName={`sustain-${controlName}`}
+            onChange={e => this.onValueChange(e, 'sustain')}
+            value={sustain}
+          />
+        </div>
+        <div className="column pad-left">
+          <RangeControl
+            label="Release"
+            controlName={`release-${controlName}`}
+            onChange={e => this.onValueChange(e, 'release')}
+            value={release}
+          />
+        </div>
       </ControlGroup>
     );
   }

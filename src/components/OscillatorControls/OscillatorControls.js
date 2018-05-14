@@ -33,9 +33,9 @@ class OscillatorControls extends Component {
     const { controlChange, controlName } = this.props;
     controlChange(controlName, 'shape', e.target.value);
   }
-  onDetuneChange(e) {
+  onDetuneChange(value) {
     const { controlChange, controlName } = this.props;
-    controlChange(controlName, 'detune', e.target.value / 100);
+    controlChange(controlName, 'detune', value / 100);
   }
   render() {
     const { controlValues, label, controlName } = this.props;
@@ -52,15 +52,19 @@ class OscillatorControls extends Component {
 
     return (
       <ControlGroup label={label}>
-        {buttons}
-        <RangeControl
-          label="Detune"
-          controlName={`detune-${controlName}`}
-          onChange={e => this.onDetuneChange(e)}
-          value={Math.round(detune * 100)}
-          min="-100"
-          max="100"
-        />
+        <div className="column">
+          <RangeControl
+            label="Detune"
+            controlName={`detune-${controlName}`}
+            onChange={e => this.onDetuneChange(e)}
+            value={Math.round(detune * 100)}
+            min="-100"
+            max="100"
+          />
+        </div>
+        <div className="column pad-left">
+          {buttons}
+        </div>
       </ControlGroup>
     );
   }

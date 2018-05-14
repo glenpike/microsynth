@@ -1,5 +1,5 @@
 .RadioButton {
-    font-size: $baseFontSize / 1.5;
+    font-size: $baseFontSize / 2;
     font-weight: bold;
     text-transform: lowercase;
     color: $darkTextColour;
@@ -7,8 +7,9 @@
         display: none;
     }
     &__label, &__label--checked{
+        text-align: center;
         float: left;
-        width: $baseFontSize * 4;
+        width: $baseFontSize * 3;
         @include primaryButton;
         &--checked {
             @include primaryButtonDown;

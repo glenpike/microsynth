@@ -1,0 +1,10 @@
+.RangeControl {
+    &__Knob {
+    }
+    &__label {
+        font-size: $baseFontSize / 2;
+        color: $indicatorColour;
+        text-align: center;
+        margin-top: $baseFontSize / 4;
+    }
+}

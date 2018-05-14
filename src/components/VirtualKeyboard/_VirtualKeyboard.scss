@@ -1,14 +1,20 @@
 .VirtualKeyboard {
     text-align: left;
+    &__Controls {
+        margin: 0 0 $baseFontSize / 2 0;
+        padding: 0;
+        line-height: $baseFontSize;
+    }
     &__Button {
         @include primaryButton;
         border: 1px solid $primaryHueDarker;
-        font-size: $baseFontSize * 0.75;
+        font-size: $baseFontSize * 0.65;
+        font-weight: bold;
         margin-right: $baseFontSize / 4;
     }
     &__Octave {
-        font-size: $baseLineHeight * 0.5;
-        padding: 0 $baseLineHeight / 2;
+        font-size: $baseFontSize * 0.65;
+        padding: 0 $baseLineHeight * 0.5;
         color: $primaryHue;
         border: 1px solid $primaryHueDarker;
     }

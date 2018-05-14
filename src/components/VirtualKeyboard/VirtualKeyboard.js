@@ -7,7 +7,7 @@ const KEY_WIDTH = 36;
 
 const labels = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
 
-const noteKeys = ['A', 'W', 'S', 'E', 'D', 'R', 'F', 'T', 'G', 'Y', 'H', 'U', 'J', 'I', 'K', 'O', 'L', 'P', 'Semicolon', 'BracketLeft', 'Quote', 'BracketRight', 'Backslash'];
+const noteKeys = ['A', 'W', 'S', 'E', 'D', 'F', 'T', 'G', 'Y', 'H', 'U', 'J', 'K', 'O', 'L', 'P', 'Semicolon', 'Quote', 'BracketRight', 'Backslash'];
 const generateNoteMap = () => {
   const notes = {};
   let noteNum = 0;
@@ -51,7 +51,7 @@ class VirtualKeyboard extends Component {
 
   onOctaveChange(amount) {
     const { octave } = this.state;
-    const newOctave = Math.min(Math.max(0, (octave + amount)), 6);
+    const newOctave = Math.min(Math.max(0, (octave + amount)), 5);
     this.setState({
       octave: newOctave,
     });
@@ -111,11 +111,11 @@ class VirtualKeyboard extends Component {
     const offset = KEY_WIDTH * 12 * octave;
     const displayOctave = (octave - 2) > 0 ? `+${(octave - 2)}` : (octave - 2);
     return (
-      <ControlGroup>
+      <ControlGroup extraClasses="ControlGroup--gradient">
         <div className="VirtualKeyboard">
           <div className="VirtualKeyboard__Controls">
-            <button className="VirtualKeyboard__Button" onClick={() => this.onOctaveChange(1)}>Octave +</button>
             <button className="VirtualKeyboard__Button" onClick={() => this.onOctaveChange(-1)}>Octave -</button>
+            <button className="VirtualKeyboard__Button" onClick={() => this.onOctaveChange(1)}>Octave +</button>
             <span className="VirtualKeyboard__Octave">{displayOctave}</span>
           </div>
           <div className="VirtualKeyboard__KeysWrapper">

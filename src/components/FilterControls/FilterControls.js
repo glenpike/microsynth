@@ -4,13 +4,9 @@ import ControlGroup from '../ControlGroup/ControlGroup';
 import RangeControl from '../RangeControl/RangeControl';
 
 class FilterControls extends Component {
-  onCutoffChange(e) {
+  onValueChange(value, param) {
     const { controlChange, controlName } = this.props;
-    controlChange(controlName, 'cutoff', e.target.value);
-  }
-  onResonanceChange(e) {
-    const { controlChange, controlName } = this.props;
-    controlChange(controlName, 'resonance', e.target.value);
+    controlChange(controlName, param, value);
   }
   render() {
     const { controlValues, label, controlName } = this.props;
@@ -23,21 +19,25 @@ class FilterControls extends Component {
 
     return (
       <ControlGroup label={label}>
-        <RangeControl
-          label="Cutoff"
-          controlName={`cutoff-${controlName}`}
-          onChange={e => this.onCutoffChange(e)}
-          value={cutoff}
-          max="10000"
-        />
-        <RangeControl
-          label="Resonance"
-          controlName={`resonance-${controlName}`}
-          onChange={e => this.onResonanceChange(e)}
-          value={resonance}
-          min="9"
-          max="50"
-        />
+        <div className="column">
+          <RangeControl
+            label="Cutoff"
+            controlName={`cutoff-${controlName}`}
+            onChange={e => this.onValueChange(e, 'cutoff')}
+            value={cutoff}
+            max="10000"
+          />
+        </div>
+        <div className="column pad-left">
+          <RangeControl
+            label="Rez"
+            controlName={`resonance-${controlName}`}
+            onChange={e => this.onValueChange(e, 'resonance')}
+            value={resonance}
+            min="9"
+            max="50"
+          />
+        </div>
       </ControlGroup>
     );
   }

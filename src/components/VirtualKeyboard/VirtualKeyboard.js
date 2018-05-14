@@ -114,8 +114,8 @@ class VirtualKeyboard extends Component {
       <ControlGroup extraClasses="ControlGroup--gradient">
         <div className="VirtualKeyboard">
           <div className="VirtualKeyboard__Controls">
-            <button className="VirtualKeyboard__Button" onClick={() => this.onOctaveChange(-1)}>Octave -</button>
-            <button className="VirtualKeyboard__Button" onClick={() => this.onOctaveChange(1)}>Octave +</button>
+            <button className="VirtualKeyboard__Button" onClick={() => this.onOctaveChange(-1)}>octave -</button>
+            <button className="VirtualKeyboard__Button" onClick={() => this.onOctaveChange(1)}>octave +</button>
             <span className="VirtualKeyboard__Octave">{displayOctave}</span>
           </div>
           <div className="VirtualKeyboard__KeysWrapper">

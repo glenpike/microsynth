@@ -3,16 +3,19 @@
 }
 
 .App-header {
+  @include block;
   background-color: $backgroundColour;
   border-bottom: $baseFontSize / 4 solid $altBackgroundColour;
   padding-top: $baseFontSize / 4;
 }
 
 .App-title {
-  @include block;
   font-size: 1.5em;
+  margin-top: $baseFontSize;
+  padding: 0;
   color: $primaryHue;
   text-shadow: 0 0 3px $primaryHue;
+  float: left;
 }
 
 .App-intro {
@@ -22,4 +25,11 @@
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
+}
+
+.App-rhs {
+  float: right;
+  margin-top: $baseFontSize * 1.5;
+  background-color: $backgroundColour;
+  color: $lightTextColour;
 }

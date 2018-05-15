@@ -12,9 +12,13 @@ let outputs;
 
 // Asks the browser for a list of devices, stores the
 // results and returns iterators to loop through these.
-const listMidiDevices = () =>
+const listMidiDevices = () => {
   // Get lists of available MIDI controllers
-  navigator.requestMIDIAccess().then((access) => {
+  if (!navigator.requestMIDIAccess) {
+    return Promise.resolve({inputs: [], outputs: []});
+  }
+
+  return navigator.requestMIDIAccess().then((access) => {
     /* eslint-disable prefer-destructuring */
     inputs = access.inputs;
     outputs = access.outputs;
@@ -26,6 +30,8 @@ const listMidiDevices = () =>
       outputs: outputs.values(),
     };
   });
+
+};
 
 const onMIDIMessage = (event, handler) => {
   const byte0 = event.data[0] & 0xf0; // eslint-disable-line no-bitwise

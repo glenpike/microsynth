@@ -133,6 +133,9 @@ class VirtualKeyboard extends Component {
                     onMouseUp={e => this.onMouseUp(number, e)}
                     onMouseOut={e => this.onMouseUp(number, e)}
                     onBlur={e => this.onMouseUp(number, e)}
+                    onTouchStart={e => this.onMouseDown(number, e)}
+                    onTouchEnd={e => this.onMouseUp(number, e)}
+                    onTouchCancel={e => this.onMouseUp(number, e)}
                   >
                     {label}
                   </button>

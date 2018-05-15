@@ -15,8 +15,10 @@ let outputs;
 const listMidiDevices = () =>
   // Get lists of available MIDI controllers
   navigator.requestMIDIAccess().then((access) => {
+    /* eslint-disable prefer-destructuring */
     inputs = access.inputs;
     outputs = access.outputs;
+    /* eslint-enable prefer-destructuring */
     return {
       // Returning generators - we can only iterate them once!
       // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...of

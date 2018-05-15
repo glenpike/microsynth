@@ -23,7 +23,7 @@ const midiControls = (state = initialState, action) => {
       return state.set('inputs', new Immutable.List(midiInputs));
     }
     case MIDI_CONTROL_MESSAGE: {
-      console.log('MIDI_CONTROL_MESSAGE ', action);
+      console.log('MIDI_CONTROL_MESSAGE ', action); // eslint-disable-line no-console
       return state;
     }
     case MIDI_INPUT_DEVICE_SELECT: {

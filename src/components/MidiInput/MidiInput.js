@@ -45,12 +45,19 @@ class MidiInput extends Component {
     // Add a dropdown to show the chosen device,,,
     const { inputs, selectedInput } = this.props;
     const options = inputs.map(({ id, name }) => (<option key={id} value={id}>{name}</option>));
-    return (
-      <select value={selectedInput} onChange={e => this.onMidiDeviceSelect(e)}>
-        <option value="none">Select</option>
-        {options}
-      </select>
-    );
+    if (options.length) {
+      return (
+        <div>
+          <label className="MidiInput__Label"  htmlFor="midiSelect">MIDI Input:
+            <select className="MidiInput__Select" id="midiSelect" value={selectedInput} onChange={e => this.onMidiDeviceSelect(e)} >
+              <option value="none">Select</option>
+              {options}
+            </select>
+          </label>
+        </div>
+      );
+    }
+    return null;
   }
 }
 

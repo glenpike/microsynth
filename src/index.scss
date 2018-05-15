@@ -96,6 +96,15 @@ li {
 @import 'components/OscillatorControls/OscillatorControls';
 @import 'components/RadioButton/RadioButton';
 @import 'components/RangeControl/RangeControl';
+
+.MidiInput {
+  &__Label {
+    color: $primaryHue;
+  }
+  &__Select {
+    margin-left: $baseFontSize;
+  }
+}
 /* TRUMPS */
 
 .clear:after {

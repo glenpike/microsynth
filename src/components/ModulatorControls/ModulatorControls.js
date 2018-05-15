@@ -12,7 +12,7 @@ class ModulationControls extends Component {
   }
   render() {
     const { controlValues, label, controlName } = this.props;
-    const { type } = controlValues[controlName];
+    const { type } = controlValues.get(controlName).toJS();
     return (
       <ControlGroup label={label}>
         <RadioButton

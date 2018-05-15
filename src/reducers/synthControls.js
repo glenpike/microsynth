@@ -22,8 +22,8 @@ export const initialState = Immutable.fromJS({
     },
     filter: {
       type: 'lowpass',
-      cutoff: 10000,
-      resonance: 0,
+      cutoff: 4000,
+      resonance: 2,
     },
     envelope: {
       attack: 1,

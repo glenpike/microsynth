@@ -48,9 +48,9 @@ const onMIDIMessage = (event, handler) => {
     }
     case 0xb0: { // continuous controller.
       const byte1 = event.data[1] & 0xff; // eslint-disable-line no-bitwise
-      console.log(`byte1 ${byte1} (${byte1.toString(16)})`); // eslint-disable-line no-console
+      // console.log(`byte1 ${byte1} (${byte1.toString(16)})`); // eslint-disable-line no-console
       if (handler.controlChange) {
-        handler.controlChange(byte1, event.data[2]);
+        handler.controlChange({ controller: byte1, value: event.data[2] });
       }
       return;
     }

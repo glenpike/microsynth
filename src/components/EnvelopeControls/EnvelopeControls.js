@@ -12,7 +12,7 @@ class EnvelopeControls extends Component {
     const { controlValues, label, controlName } = this.props;
     const {
       attack, decay, sustain, release,
-    } = controlValues[controlName];
+    } = controlValues.get(controlName).toJS();
 
     // TODO: dry up...
     return (

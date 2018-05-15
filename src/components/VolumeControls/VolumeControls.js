@@ -10,7 +10,7 @@ class VolumeControls extends Component {
   }
   render() {
     const { controlValues, label, controlName } = this.props;
-    const { level, pan } = controlValues[controlName];
+    const { level, pan } = controlValues.get(controlName).toJS();
 
     // TODO: dry up...
     return (

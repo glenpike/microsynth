@@ -3,7 +3,7 @@ import { controlChange } from '../actions';
 import SynthControls from '../components/SynthControls/SynthControls';
 
 const mapStateToProps = state => ({
-  controlValues: state.synthControls.get('controlValues').toJS(),
+  controlValues: state.synthControls.get('controlValues'),
 });
 
 const mapDispatchToProps = dispatch => ({

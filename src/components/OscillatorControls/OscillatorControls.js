@@ -39,7 +39,7 @@ class OscillatorControls extends Component {
   }
   render() {
     const { controlValues, label, controlName } = this.props;
-    const { shape, detune } = controlValues[controlName];
+    const { shape, detune } = controlValues.get(controlName).toJS();
     const buttons = waveTypes.map(({ label: buttonLabel, value }) => (
       <RadioButton
         key={`${value}-${controlName}`}
@@ -58,8 +58,8 @@ class OscillatorControls extends Component {
             controlName={`detune-${controlName}`}
             onChange={e => this.onDetuneChange(e)}
             value={Math.round(detune * 100)}
-            min="-100"
-            max="100"
+            min={-100}
+            max={100}
           />
         </div>
         <div className="column pad-left">

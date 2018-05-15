@@ -1,4 +1,13 @@
 .ControlGroup {
     @include block;
     float: left;
+    box-shadow: 0 0 1px 1px rgba(81, 220, 230, 0.5);
+    &--alt {
+        border-color: $indicatorColour;
+        box-shadow: 0 0 1px 1px rgba(240, 81, 107, 0.5);
+    }
+    &--gradient {
+        background-color: $altBackgroundColour;
+        @include backgroundGradient;
+    }
 }

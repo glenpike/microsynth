@@ -1,18 +1,19 @@
 $baseFontSize:   24px !default;
 $baseLineHeight: 36px !default;
 $baseFontFamily: sans-serif;
-$veryDarkTextColour: #0e0d0c;
+$veryDarkTextColour: #11100f;
 $darkTextColour: #292426;
-$mediumTextColour: #a39991;
+$mediumTextColour: #3d393b;
 $lightTextColour: #e7e7e5;
 $backgroundColour: #292426;
-$altBackgroundColour: #474445;
-$primaryHue: #51dce6;
-$secondaryHue: #a0a8e5;
-$tertiaryHue: #e494ac;
-$displayColour: #7fb514;
+$altBackgroundColour: #201e1f;
+$primaryHue: #34e2e2;
+$primaryHueDarker: #16c6c9;
+$secondaryHue: #ad7fa8;
+$secondaryHueDarker: #75507b;
 $indicatorColour: #f0516b;
-
+$indicatorColourDarker: #a7253b;
+$displayColour: #7fb514;
 @import 'css/_normalize';
 
 /* TOOLS */
@@ -21,6 +22,28 @@ $indicatorColour: #f0516b;
   margin: $baseFontSize / 2;
   padding: $baseFontSize / 2;
   border: 1px solid $primaryHue;
+}
+
+@mixin primaryButton () {
+  margin: 0;
+  padding: 0 $baseFontSize / 4;
+  color: $darkTextColour;
+  // border: 1px solid $altBackgroundColour;
+  box-shadow: 0 0 1px 1px rgba(81, 220, 230, 0.5);
+  background-color: $primaryHue;
+}
+
+@mixin primaryButtonHover () {
+  background-color: $primaryHueDarker;
+}
+@mixin primaryButtonDown () {
+  color: $lightTextColour;
+  background-color: $indicatorColour;
+  box-shadow: 0 0 1px 1px rgba(240, 81, 107, 0.5);
+}
+
+@mixin backgroundGradient() {
+  background: linear-gradient(135deg, $veryDarkTextColour 0%,$darkTextColour 20%, $mediumTextColour 27%,$darkTextColour 35%,$veryDarkTextColour 100%);
 }
 
 /* ELEMENTS */
@@ -34,8 +57,9 @@ html{
 }
 
 body {
-  color: $darkTextColour;
+  color: $mediumTextColour;
   background: $veryDarkTextColour;
+  background: linear-gradient(147deg, #0e0e0e 100%, #292426 51%,#0e0e0e 100%)
 }
 
 h1,h2,h3,h4,h5,h6,hgroup,
@@ -56,14 +80,14 @@ li {
 
 /* OBJECTS */
 
-/* COMPONENTS */
-.button {
-  font-weight: 700;
-  padding: $baseFontSize / 4 $baseFontSize / 2;
-  background-color: $primaryHue;
-  border: 1px solid $primaryHue;
-  border-radius: $baseFontSize / 4;
-  color: $lightTextColour;
+// Need a grid?
+
+.column {
+  float: left;
+}
+
+.pad-left {
+  padding-left: $baseFontSize / 2;
 }
 
 @import 'components/App/App';
@@ -71,6 +95,7 @@ li {
 @import 'components/ControlGroup/ControlGroup';
 @import 'components/OscillatorControls/OscillatorControls';
 @import 'components/RadioButton/RadioButton';
+@import 'components/RangeControl/RangeControl';
 /* TRUMPS */
 
 .clear:after {

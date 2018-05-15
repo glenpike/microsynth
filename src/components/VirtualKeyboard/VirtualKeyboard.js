@@ -1,58 +1,42 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import ControlGroup from '../ControlGroup/ControlGroup';
 
-const keyMap = [
-  {
-    number: 48,
-    label: 'C',
-  },
-  {
-    number: 49,
-    label: 'C#',
-  },
-  {
-    number: 50,
-    label: 'D',
-  },
-  {
-    number: 51,
-    label: 'D#',
-  },
-  {
-    number: 52,
-    label: 'E',
-  },
-  {
-    number: 53,
-    label: 'F',
-  },
-  {
-    number: 54,
-    label: 'F#',
-  },
-  {
-    number: 55,
-    label: 'G',
-  },
-  {
-    number: 56,
-    label: 'G#',
-  },
-  {
-    number: 57,
-    label: 'A',
-  },
-  {
-    number: 58,
-    label: 'Bb',
-  },
-  {
-    number: 59,
-    label: 'B',
-  },
-];
+// TODO: This is based on $baseLineHeight in CSS!
+const KEY_WIDTH = 36;
+
+const labels = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+
+const noteKeys = ['A', 'W', 'S', 'E', 'D', 'F', 'T', 'G', 'Y', 'H', 'U', 'J', 'K', 'O', 'L', 'P', 'Semicolon', 'Quote', 'BracketRight', 'Backslash'];
+const generateNoteMap = () => {
+  const notes = {};
+  let noteNum = 0;
+
+  noteKeys.forEach((key) => {
+    if (key.length === 1) {
+      key = `Key${key}`; // eslint-disable-line no-param-reassign
+    }
+    notes[key] = noteNum;
+    noteNum += 1;
+  });
+
+  return notes;
+};
 
 class VirtualKeyboard extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { octave: 2 };
+  }
+  componentWillMount() {
+    this.setupKeyboard();
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keydown');
+    document.removeEventListener('keyup');
+  }
+
   onMouseDown(number, event) {
     const { noteOn } = this.props;
     event.preventDefault();
@@ -64,30 +48,103 @@ class VirtualKeyboard extends Component {
     event.preventDefault();
     noteOff(number);
   }
+
+  onOctaveChange(amount) {
+    const { octave } = this.state;
+    const newOctave = Math.min(Math.max(0, (octave + amount)), 5);
+    this.setState({
+      octave: newOctave,
+    });
+  }
+
+  onKeyDown(e) {
+    if (e.repeat) {
+      return;
+    }
+    const { noteOn } = this.props;
+    const { octave } = this.state;
+    let note = this.keyboardToNotes[e.code];
+    if (typeof note !== 'undefined') {
+      note += octave * 12;
+      noteOn(note);
+    }
+  }
+
+  onKeyUp(e) {
+    const { octave } = this.state;
+    const { noteOff } = this.props;
+    let note = this.keyboardToNotes[e.code];
+
+    if (typeof note !== 'undefined') {
+      note += octave * 12;
+      noteOff(note);
+    } else if (e.code === 'PageUp') {
+      this.onOctaveChange(1);
+    } else if (e.code === 'PageDown') {
+      this.onOctaveChange(-1);
+    }
+  }
+
+  setupKeyboard() {
+    this.octave = 0;
+    this.keyMap = [];
+    for (let i = 0; i < 89; i += 1) {
+      const note = labels[i % 12];
+      this.keyMap.push({ number: i, label: note });
+    }
+    this.setState({
+      octave: 2,
+    });
+    this.keyboardToNotes = generateNoteMap();
+    document.addEventListener('keydown', (e) => {
+      this.onKeyDown(e);
+    });
+    document.addEventListener('keyup', (e) => {
+      this.onKeyUp(e);
+    });
+  }
+
   render() {
     const { notesOn } = this.props;
+    const { octave } = this.state;
     const noteOnValues = notesOn.map(noteOn => noteOn.noteNum);
+    const offset = KEY_WIDTH * 12 * octave;
+    const displayOctave = (octave - 2) > 0 ? `+${(octave - 2)}` : (octave - 2);
     return (
-      <div className="VirtualKeyboard clear">
-        {keyMap.map((k) => {
-          const { number, label } = k;
-          return (
-            <button
-              tabIndex={number}
-              className={`VirtualKeyboard__Key${
-                noteOnValues.indexOf(number) !== -1 ? '--down' : ''
-              }`}
-              key={number}
-              onMouseDown={e => this.onMouseDown(number, e)}
-              onMouseUp={e => this.onMouseUp(number, e)}
-              onMouseOut={e => this.onMouseUp(number, e)}
-              onBlur={e => this.onMouseUp(number, e)}
-            >
-              {label}
-            </button>
-          );
-        })}
-      </div>
+      <ControlGroup extraClasses="ControlGroup--gradient">
+        <div className="VirtualKeyboard">
+          <div className="VirtualKeyboard__Controls">
+            <button className="VirtualKeyboard__Button" onClick={() => this.onOctaveChange(-1)}>octave -</button>
+            <button className="VirtualKeyboard__Button" onClick={() => this.onOctaveChange(1)}>octave +</button>
+            <span className="VirtualKeyboard__Octave">{displayOctave}</span>
+          </div>
+          <div className="VirtualKeyboard__KeysWrapper">
+            <div className="VirtualKeyboard__Keys" style={{ left: `${-offset}px` }}>
+              {this.keyMap.map((k) => {
+                const { number, label } = k;
+                return (
+                  <button
+                    tabIndex={number}
+                    className={`VirtualKeyboard__Key${
+                      noteOnValues.indexOf(number) !== -1 ? '--down' : ''
+                    }`}
+                    key={number}
+                    onMouseDown={e => this.onMouseDown(number, e)}
+                    onMouseUp={e => this.onMouseUp(number, e)}
+                    onMouseOut={e => this.onMouseUp(number, e)}
+                    onBlur={e => this.onMouseUp(number, e)}
+                    onTouchStart={e => this.onMouseDown(number, e)}
+                    onTouchEnd={e => this.onMouseUp(number, e)}
+                    onTouchCancel={e => this.onMouseUp(number, e)}
+                  >
+                    {label}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </ControlGroup>
     );
   }
 }

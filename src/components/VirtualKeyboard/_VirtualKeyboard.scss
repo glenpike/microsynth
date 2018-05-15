@@ -1,16 +1,46 @@
 .VirtualKeyboard {
-    @include block;
-    &__Key, &__Key--down{
-        color: $darkTextColour;
+    text-align: left;
+    &__Controls {
+        margin: 0 0 $baseFontSize / 2 0;
+        padding: 0;
+        line-height: $baseFontSize;
+    }
+    &__Button {
+        @include primaryButton;
+        border: 1px solid $primaryHueDarker;
+        font-size: $baseFontSize * 0.65;
         font-weight: bold;
+        margin-right: $baseFontSize / 4;
+    }
+    &__Octave {
+        font-size: $baseFontSize * 0.65;
+        padding: 0 $baseLineHeight * 0.5;
+        color: $primaryHue;
+        border: 1px solid $primaryHueDarker;
+    }
+    &__KeysWrapper {
+        width: $baseLineHeight * 30;
+        height: $baseLineHeight * 4;
+        overflow: hidden;
+        position: relative;
+    }
+    &__Keys {
+        height: $baseLineHeight * 4;
+        width: $baseLineHeight * 128;
+        position: relative;
+        left: 0;
+        transition:left 0.3s linear;
+        font-size: $baseFontSize * 2 / 3;
+    }
+    &__Key, &__Key--down{
         float: left;
         width: $baseLineHeight;
         height: $baseLineHeight * 4;
-        padding: 0;
-        background-color: $primaryHue;
-        border: 1px solid $altBackgroundColour;
+        @include primaryButton;
+        padding-top: $baseFontSize * 4.5;
+        border: 1px solid $primaryHueDarker;
         &--down {
-            background-color: $secondaryHue;
+            @include primaryButtonDown;
         }
     }
 }

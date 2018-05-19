@@ -1,4 +1,5 @@
 import { Component } from 'react';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
 import { NOTE_ON, NOTE_OFF, CONTROL_CHANGE } from '../../actions/index';
 
@@ -11,6 +12,11 @@ const getPitch = (note) => {
 };
 
 class WebAudioSynth extends Component {
+  static propTypes = {
+    clearEventQueue: PropTypes.func.isRequired,
+    synthEvents: ImmutablePropTypes.list.isRequired,
+    controlValues: ImmutablePropTypes.map.isRequired,
+  };
   componentWillMount() {
     this.audioContext = new (window.AudioContext ||
       window.webkitAudioContext)();
@@ -20,8 +26,8 @@ class WebAudioSynth extends Component {
 
   componentWillReceiveProps(props) {
     const { synthEvents } = props;
-    if (synthEvents.length) {
-      synthEvents.forEach(event => this.processEvent(event));
+    if (synthEvents.size) {
+      synthEvents.toJS().forEach(event => this.processEvent(event));
     }
     props.clearEventQueue();
   }
@@ -59,19 +65,20 @@ class WebAudioSynth extends Component {
 
   createSynth() {
     const {
-      controlValues: {
-        'oscillator-1': osc1,
-        'oscillator-2': osc2,
-        modulation: {
-          type: modType,
-        },
-        filter,
-        volume: {
-          level,
-          pan,
-        },
-      },
+      controlValues,
     } = this.props;
+    const {
+      'oscillator-1': osc1,
+      'oscillator-2': osc2,
+      modulation: {
+        type: modType,
+      },
+      filter,
+      volume: {
+        level,
+        pan,
+      },
+    } = controlValues.toJS();
     const ctx = this.audioContext;
 
     this.osc1 = this.createOscillator(osc1);
@@ -130,15 +137,16 @@ class WebAudioSynth extends Component {
 
   processEvent(event) {
     const {
-      controlValues: {
-        envelope: {
-          attack,
-          decay,
-          sustain,
-          release,
-        },
-      },
+      controlValues,
     } = this.props;
+    const {
+      envelope: {
+        attack,
+        decay,
+        sustain,
+        release,
+      },
+    } = controlValues.toJS();
     const now = this.audioContext.currentTime;
 
     switch (event.type) {
@@ -178,11 +186,5 @@ class WebAudioSynth extends Component {
     return null;
   }
 }
-
-WebAudioSynth.propTypes = {
-  clearEventQueue: PropTypes.func.isRequired,
-  synthEvents: PropTypes.arrayOf(PropTypes.object).isRequired, // eslint-disable-line react/no-typos
-  controlValues: PropTypes.objectOf(PropTypes.any).isRequired, // eslint-disable-line react/no-typos
-};
 
 export default WebAudioSynth;

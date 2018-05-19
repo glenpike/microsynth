@@ -27,7 +27,7 @@ class FilterControls extends Component {
             controlName={`cutoff-${controlName}`}
             onChange={e => this.onValueChange(e, 'cutoff')}
             value={cutoff}
-            max="10000"
+            max={10000}
           />
         </div>
         <div className="column pad-left">
@@ -36,8 +36,8 @@ class FilterControls extends Component {
             controlName={`resonance-${controlName}`}
             onChange={e => this.onValueChange(e, 'resonance')}
             value={resonance}
-            min="9"
-            max="50"
+            min={9}
+            max={50}
           />
         </div>
       </ControlGroup>

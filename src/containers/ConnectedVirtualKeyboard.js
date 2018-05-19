@@ -1,14 +1,12 @@
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { noteOn, noteOff } from '../actions';
 import VirtualKeyboard from '../components/VirtualKeyboard/VirtualKeyboard';
 
 const mapStateToProps = state => ({
-  notesOn: state.synthControls.get('notesOn').toJS(),
+  notesOn: state.synthControls.get('notesOn'),
 });
 
-const mapDispatchToProps = dispatch => ({
-  noteOn: noteNum => dispatch(noteOn(noteNum)),
-  noteOff: noteNum => dispatch(noteOff(noteNum)),
-});
+const mapDispatchToProps = dispatch => bindActionCreators({ noteOn, noteOff }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(VirtualKeyboard);

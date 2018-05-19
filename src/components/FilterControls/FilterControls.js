@@ -1,22 +1,24 @@
 import React, { Component } from 'react';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
 import ControlGroup from '../ControlGroup/ControlGroup';
 import RangeControl from '../RangeControl/RangeControl';
 
 class FilterControls extends Component {
+  static propTypes = {
+    label: PropTypes.string.isRequired,
+    controlName: PropTypes.string.isRequired,
+    controlChange: PropTypes.func.isRequired,
+    controlValues: ImmutablePropTypes.map.isRequired,
+  };
+
   onValueChange(value, param) {
     const { controlChange, controlName } = this.props;
     controlChange(controlName, param, value);
   }
   render() {
     const { controlValues, label, controlName } = this.props;
-    const { cutoff, resonance } = controlValues[controlName];
-    const controls = [];
-
-    controls.push();
-
-    controls.push();
-
+    const { cutoff, resonance } = controlValues.get(controlName).toJS();
     return (
       <ControlGroup label={label}>
         <div className="column">
@@ -42,12 +44,5 @@ class FilterControls extends Component {
     );
   }
 }
-
-FilterControls.propTypes = {
-  label: PropTypes.string.isRequired,
-  controlName: PropTypes.string.isRequired,
-  controlChange: PropTypes.func.isRequired,
-  controlValues: PropTypes.objectOf(PropTypes.any).isRequired,
-};
 
 export default FilterControls;

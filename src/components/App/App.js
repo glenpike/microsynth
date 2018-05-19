@@ -9,7 +9,7 @@ const App = () => (
     <header className="App-header clear">
       <h1 className="App-title">microsynth</h1>
       <div className="App-rhs">
-        <ConnectedMidiInput/>
+        <ConnectedMidiInput />
       </div>
     </header>
     <ConnectedControls />

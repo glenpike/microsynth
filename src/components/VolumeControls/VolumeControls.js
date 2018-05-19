@@ -1,16 +1,24 @@
 import React, { Component } from 'react';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
 import ControlGroup from '../ControlGroup/ControlGroup';
 import RangeControl from '../RangeControl/RangeControl';
 
 class VolumeControls extends Component {
+  static propTypes = {
+    label: PropTypes.string.isRequired,
+    controlName: PropTypes.string.isRequired,
+    controlChange: PropTypes.func.isRequired,
+    controlValues: ImmutablePropTypes.map.isRequired,
+  };
+
   onValueChange(value, param) {
     const { controlChange, controlName } = this.props;
     controlChange(controlName, param, value);
   }
   render() {
     const { controlValues, label, controlName } = this.props;
-    const { level, pan } = controlValues[controlName];
+    const { level, pan } = controlValues.get(controlName).toJS();
 
     // TODO: dry up...
     return (
@@ -37,12 +45,5 @@ class VolumeControls extends Component {
     );
   }
 }
-
-VolumeControls.propTypes = {
-  label: PropTypes.string.isRequired,
-  controlName: PropTypes.string.isRequired,
-  controlChange: PropTypes.func.isRequired,
-  controlValues: PropTypes.objectOf(PropTypes.any).isRequired,
-};
 
 export default VolumeControls;

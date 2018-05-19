@@ -15,7 +15,7 @@ let outputs;
 const listMidiDevices = () => {
   // Get lists of available MIDI controllers
   if (!navigator.requestMIDIAccess) {
-    return Promise.resolve({inputs: [], outputs: []});
+    return Promise.resolve({ inputs: [], outputs: [] });
   }
 
   return navigator.requestMIDIAccess().then((access) => {
@@ -30,7 +30,6 @@ const listMidiDevices = () => {
       outputs: outputs.values(),
     };
   });
-
 };
 
 const onMIDIMessage = (event, handler) => {

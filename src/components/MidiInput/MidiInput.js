@@ -48,7 +48,7 @@ class MidiInput extends Component {
     if (options.length) {
       return (
         <div>
-          <label className="MidiInput__Label"  htmlFor="midiSelect">MIDI Input:
+          <label className="MidiInput__Label" htmlFor="midiSelect">MIDI Input:
             <select className="MidiInput__Select" id="midiSelect" value={selectedInput} onChange={e => this.onMidiDeviceSelect(e)} >
               <option value="none">Select</option>
               {options}

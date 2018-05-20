@@ -6,9 +6,11 @@ import ConnectedMidiInput from '../../containers/ConnectedMidiInput';
 
 const App = () => (
   <div className="App">
-    <header className="App-header">
+    <header className="App-header clear">
       <h1 className="App-title">microsynth</h1>
-      <ConnectedMidiInput />
+      <div className="App-rhs">
+        <ConnectedMidiInput />
+      </div>
     </header>
     <ConnectedControls />
     <ConnectedWebAudioSynth />

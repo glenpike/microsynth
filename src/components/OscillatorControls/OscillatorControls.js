@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
 import ControlGroup from '../ControlGroup/ControlGroup';
 import RangeControl from '../RangeControl/RangeControl';
@@ -25,6 +26,13 @@ const waveTypes = [
 ];
 
 class OscillatorControls extends Component {
+  static propTypes = {
+    label: PropTypes.string.isRequired,
+    controlName: PropTypes.string.isRequired,
+    controlChange: PropTypes.func.isRequired,
+    controlValues: ImmutablePropTypes.map.isRequired,
+  };
+
   componentWillMount() {
   }
   // TODO: combine these into a handler that returns a
@@ -69,12 +77,5 @@ class OscillatorControls extends Component {
     );
   }
 }
-
-OscillatorControls.propTypes = {
-  label: PropTypes.string.isRequired,
-  controlName: PropTypes.string.isRequired,
-  controlChange: PropTypes.func.isRequired,
-  controlValues: PropTypes.objectOf(PropTypes.any).isRequired,
-};
 
 export default OscillatorControls;

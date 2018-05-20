@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
 import ControlGroup from '../ControlGroup/ControlGroup';
 
@@ -24,6 +25,11 @@ const generateNoteMap = () => {
 };
 
 class VirtualKeyboard extends Component {
+  static propTypes = {
+    noteOn: PropTypes.func.isRequired,
+    noteOff: PropTypes.func.isRequired,
+    notesOn: ImmutablePropTypes.list.isRequired,
+  };
   constructor(props) {
     super(props);
     this.state = { octave: 2 };
@@ -107,7 +113,7 @@ class VirtualKeyboard extends Component {
   render() {
     const { notesOn } = this.props;
     const { octave } = this.state;
-    const noteOnValues = notesOn.map(noteOn => noteOn.noteNum);
+    const noteOnValues = notesOn.map(noteOn => noteOn.noteNum).toJS();
     const offset = KEY_WIDTH * 12 * octave;
     const displayOctave = (octave - 2) > 0 ? `+${(octave - 2)}` : (octave - 2);
     return (
@@ -148,11 +154,5 @@ class VirtualKeyboard extends Component {
     );
   }
 }
-
-VirtualKeyboard.propTypes = {
-  noteOn: PropTypes.func.isRequired,
-  noteOff: PropTypes.func.isRequired,
-  notesOn: PropTypes.arrayOf(PropTypes.object).isRequired,
-};
 
 export default VirtualKeyboard;

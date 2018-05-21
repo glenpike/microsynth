@@ -12,6 +12,7 @@ export const initialState = Immutable.fromJS({
   inputs: Immutable.List(),
   outputs: Immutable.List(),
   selectedInput: null,
+  selectedInputId: null,
   // TODO: This is separated from the synth state, but we know about it!
   // Also doesn't map values to the ranges we want - see
   // https://github.com/glenpike/web-midi-test/blob/master/src/tone-simple-synth.js#L28
@@ -20,8 +21,11 @@ export const initialState = Immutable.fromJS({
   // We're also separating our min & max vals here - the midimap + synthControls needs
   // almost to be defined as one thing...
   midiMap: {
-    71: { groupName: 'filter', controlType: 'resonance', map: val => val * (10000 / 128) },
-    74: { groupName: 'filter', controlType: 'cutoff', map: val => val * (20 / 128) },
+    10: { groupName: 'volume', controlType: 'pan', map: val => Math.round((val * (200 / 127))) - 100 },
+    71: { groupName: 'filter', controlType: 'resonance', map: val => Math.round(val * (20 / 127)) },
+    72: { groupName: 'envelope', controlType: 'release', map: val => Math.round(val * (100 / 127)) },
+    73: { groupName: 'envelope', controlType: 'attack', map: val => Math.round(val * (100 / 127)) },
+    74: { groupName: 'filter', controlType: 'cutoff', map: val => Math.round(val * (10000 / 127)) },
   },
 });
 
@@ -40,11 +44,15 @@ const midiControls = (state = initialState, action) => {
     }
     case MIDI_DEVICES_LIST_ERROR: {
       const { error } = action;
-      return state.set('midiListerror', error)
+      return state.set('midiListerror', error);
     }
     case MIDI_INPUT_DEVICE_SELECT: {
       const { id } = action;
-      return state.set('selectedInput', id);
+      const input = state.get('inputs').filter(({ id: inputId }) => inputId === id);
+      if (input.size) {
+        return state.set('selectedInputId', id).set('selectedInput', input.get(0));
+      }
+      return state;
     }
     default:
       return state;

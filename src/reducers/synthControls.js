@@ -22,7 +22,7 @@ export const initialState = Immutable.fromJS({
     },
     filter: {
       type: 'lowpass',
-      cutoff: 4000,
+      cutoff: 500,
       resonance: 2,
     },
     envelope: {
@@ -32,7 +32,7 @@ export const initialState = Immutable.fromJS({
       release: 50,
     },
     volume: {
-      level: 0.5,
+      level: 50,
       pan: 0.0,
     },
   },

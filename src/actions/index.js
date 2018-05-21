@@ -57,7 +57,7 @@ export const listMidiDevices = () => (dispatch) => {
   }
   return navigator.requestMIDIAccess()
     .then((deviceList) => {
-      dispatch(midiDevicesListSuccess(deviceList))
+      dispatch(midiDevicesListSuccess(deviceList));
     })
     .catch((error) => {
       dispatch(midiDevicesListError(error));

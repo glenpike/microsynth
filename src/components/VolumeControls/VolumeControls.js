@@ -29,6 +29,7 @@ class VolumeControls extends Component {
             controlName={`level-${controlName}`}
             onChange={e => this.onValueChange(e, 'level')}
             value={level}
+            max={100}
           />
         </div>
         <div className="column pad-left">

@@ -15,7 +15,7 @@ const RangeControl = (props) => {
   return (
     <div className="RangeControl">
       <Knob style={knobstyle} className="RangeControl__knob" skin={skins.s11} defaultValue={value} min={min} max={max} onChange={onChange} unlockDistance="25" />
-      <div className="RangeControl__label">{label}</div>
+      <div className="RangeControl__label">{label} {value}</div>
     </div>
   );
 };

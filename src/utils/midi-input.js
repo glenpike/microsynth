@@ -68,34 +68,20 @@ const onMIDIMessage = (event, handler) => {
     }
   }
 };
+const unselectMidiDevice = (input) => {
+  if (input) {
+    // eslint-disable-next-line no-param-reassign
+    input.onmidimessage = null;
+  }
+};
 
-// Get the input & output for a specific device ID
-const selectMidiDevice = (id, handler) => {
-  if (!inputs && !outputs) {
-    console.log('no inputs or outputs '); // eslint-disable-line no-console
-    return null;
-  }
-  const device = {};
-  /* eslint-disable no-restricted-syntax */
-  for (const input of inputs.values()) {
-    if (id && input.id === id) {
-      // console.log('found input ', input);
-      device.input = input;
-      device.input.onmidimessage = e => onMIDIMessage(e, handler);
-    }
-  }
-  for (const output of outputs.values()) {
-    // console.log('output ', output);
-    if (id && output.id === id) {
-      // console.log('found output ', output);
-      device.output = output;
-    }
-  }
-  /* eslint-enable no-restricted-syntax */
-  return device;
+const selectMidiDevice = (input, handler) => {
+  // eslint-disable-next-line no-param-reassign
+  input.onmidimessage = e => onMIDIMessage(e, handler);
 };
 
 module.exports = {
   listMidiDevices,
   selectMidiDevice,
+  unselectMidiDevice,
 };

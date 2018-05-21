@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
-import { selectMidiDevice } from '../../utils/midi-input';
+import { selectMidiDevice, unselectMidiDevice } from '../../utils/midi-input';
 
 
 class MidiInput extends Component {
   static propTypes = {
     inputs: ImmutablePropTypes.map.isRequired,
+    selectedInputId: PropTypes.any, // eslint-disable-line
     selectedInput: PropTypes.any, // eslint-disable-line
     noteOn: PropTypes.func.isRequired,
     noteOff: PropTypes.func.isRequired,
@@ -27,25 +28,27 @@ class MidiInput extends Component {
     listMidiDevices();
   }
 
-  componentWillReceiveProps(props) {
+  componentWillUpdate(nextProps) {
     // if the selectedInput changes...
     const {
       selectedInput,
       noteOn, noteOff,
-    } = props;
-    if (selectedInput && selectedInput !== this.selectedInput) {
+    } = this.props;
+    const { selectedInput: newSelectedInput } = nextProps;
+    if (newSelectedInput && newSelectedInput !== selectedInput) {
       const handler = {
         noteOff,
         noteOn,
         controlChange: msg => this.onMidiControlChange(msg),
       };
-      selectMidiDevice(selectedInput, handler);
+      selectMidiDevice(newSelectedInput, handler);
     }
   }
 
 
   componentWillUnmount() {
-    // TODO: Stop listening!
+    const { selectedInput } = this.props;
+    unselectMidiDevice(selectedInput);
   }
 
   onMidiControlChange(msg) {
@@ -69,14 +72,14 @@ class MidiInput extends Component {
 
   render() {
     // Add a dropdown to show the chosen device,,,
-    const { inputs, selectedInput } = this.props;
+    const { inputs, selectedInputId } = this.props;
     const options = inputs.map(({ id, name }) =>
       (<option key={id} value={id}>{name}</option>)).toJS();
     if (options.length) {
       return (
         <div>
           <label className="MidiInput__Label" htmlFor="midiSelect">MIDI Input:
-            <select className="MidiInput__Select" id="midiSelect" value={selectedInput || ''} onChange={e => this.onMidiDeviceSelect(e)} >
+            <select className="MidiInput__Select" id="midiSelect" value={selectedInputId || ''} onChange={e => this.onMidiDeviceSelect(e)} >
               <option value="none">Select</option>
               {options}
             </select>

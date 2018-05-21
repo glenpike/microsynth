@@ -48,8 +48,8 @@ class WebAudioSynth extends Component {
       'filter-type': (type) => { this.filter1.type = type; this.filter2.type = type; },
       'filter-cutoff': (cutoff) => { this.filter1.frequency.value = cutoff; this.filter2.frequency.value = cutoff; },
       'filter-resonance': (resonance) => { this.filter1.Q.value = resonance; this.filter2.Q.value = resonance; },
-      'volume-level': level => this.volume.gain.value = level,
-      'volume-pan': pan => this.panner.pan.value = pan,
+      'volume-level': level => this.volume.gain.value = level / 100,
+      'volume-pan': pan => this.panner.pan.value = pan / 100,
     };
     /* eslint-enable no-return-assign */
   }
@@ -94,9 +94,9 @@ class WebAudioSynth extends Component {
     this.vca.gain.value = 0;
 
     this.volume = ctx.createGain();
-    this.volume.gain.value = level;
+    this.volume.gain.value = level / 100;
     this.panner = ctx.createStereoPanner();
-    this.panner.pan.value = pan;
+    this.panner.pan.value = pan / 100;
 
     // Connect the Nodes together.
     this.setupModType(modType);

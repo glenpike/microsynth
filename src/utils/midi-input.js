@@ -1,36 +1,9 @@
 /*
-    Very simplistic module for listing, getting MIDI devices.
-    Will also allow handlerping of an input to
+    MIDI message handler - simple.
+    TODO: move this function to Redux Middleware maybe?
     See https://webaudio.github.io/web-midi-api
     & https://developer.mozilla.org/en-US/docs/Web/API/MIDIAccess
 */
-
-// Store our MIDI inputs / outputs here.
-// We don't listen for disconnect, which could happen!
-let inputs;
-let outputs;
-
-// Asks the browser for a list of devices, stores the
-// results and returns iterators to loop through these.
-const listMidiDevices = () => {
-  // Get lists of available MIDI controllers
-  if (!navigator.requestMIDIAccess) {
-    return Promise.resolve({ inputs: [], outputs: [] });
-  }
-
-  return navigator.requestMIDIAccess().then((access) => {
-    /* eslint-disable prefer-destructuring */
-    inputs = access.inputs;
-    outputs = access.outputs;
-    /* eslint-enable prefer-destructuring */
-    return {
-      // Returning generators - we can only iterate them once!
-      // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...of
-      inputs: inputs.values(),
-      outputs: outputs.values(),
-    };
-  });
-};
 
 const onMIDIMessage = (event, handler) => {
   const byte0 = event.data[0] & 0xf0; // eslint-disable-line no-bitwise
@@ -68,6 +41,7 @@ const onMIDIMessage = (event, handler) => {
     }
   }
 };
+
 const unselectMidiDevice = (input) => {
   if (input) {
     // eslint-disable-next-line no-param-reassign
@@ -81,7 +55,6 @@ const selectMidiDevice = (input, handler) => {
 };
 
 module.exports = {
-  listMidiDevices,
   selectMidiDevice,
   unselectMidiDevice,
 };

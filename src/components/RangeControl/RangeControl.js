@@ -1,20 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Knob } from 'react-rotary-knob';
-import * as skins from 'react-rotary-knob-skin-pack';
+import Knob from './Knob';
+// import * as skins from 'react-rotary-knob-skin-pack';
 
-const knobstyle = {
-  width: '48px',
-  height: '48px',
-};
+// const knobstyle = {
+//   width: '48px',
+//   height: '48px',
+// };
 
 const RangeControl = (props) => {
   const {
-    label, value = 0, min = 0, max = 128, onChange,
+    label, value = 0, onChange, min = 0, max = 128,
   } = props;
   return (
     <div className="RangeControl">
-      <Knob style={knobstyle} className="RangeControl__knob" skin={skins.s11} defaultValue={value} min={min} max={max} onChange={onChange} unlockDistance="25" />
+      { /* <Knob style={knobstyle} className="RangeControl__knob" skin={skins.s11} defaultValue={value} min={min} max={max} onChange={onChange} unlockDistance="25" /> */}
+      <Knob className="RangeControl__Knob" onChange={onChange} defaultValue={value} min={min} max={max} />
       <div className="RangeControl__label">{label} {value}</div>
     </div>
   );

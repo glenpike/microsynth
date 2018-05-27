@@ -10,6 +10,7 @@
     "react": "^16.3.2",
     "react-dom": "^16.3.2",
     "react-immutable-proptypes": "^2.1.0",
+    "react-measure": "^2.0.0",
     "react-redux": "^5.0.7",
     "react-rotary-knob": "^1.1.1",
     "react-rotary-knob-skin-pack": "^1.0.2",

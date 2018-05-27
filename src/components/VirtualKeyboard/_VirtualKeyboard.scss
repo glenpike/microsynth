@@ -19,7 +19,8 @@
         border: 1px solid $primaryHueDarker;
     }
     &__KeysWrapper {
-        width: $baseLineHeight * 30;
+        width: 100%;
+        max-width: 100%;
         height: $baseLineHeight * 4;
         overflow: hidden;
         position: relative;

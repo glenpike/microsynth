@@ -26,6 +26,7 @@ const generateNoteMap = () => {
 
 class VirtualKeyboard extends Component {
   static propTypes = {
+    contentRect: ImmutablePropTypes.map.isRequired,
     noteOn: PropTypes.func.isRequired,
     noteOff: PropTypes.func.isRequired,
     notesOn: ImmutablePropTypes.list.isRequired,
@@ -111,14 +112,16 @@ class VirtualKeyboard extends Component {
   }
 
   render() {
-    const { notesOn } = this.props;
+    const PADDING=24; // need to get this from the CSS?
+    const { notesOn, contentRect } = this.props;
+    const width = contentRect.getIn(['client', 'width'], 100) - PADDING;
     const { octave } = this.state;
     const noteOnValues = notesOn.map(noteOn => noteOn.noteNum).toJS();
     const offset = KEY_WIDTH * 12 * octave;
     const displayOctave = (octave - 2) > 0 ? `+${(octave - 2)}` : (octave - 2);
     return (
       <ControlGroup extraClasses="ControlGroup--gradient">
-        <div className="VirtualKeyboard">
+        <div className="VirtualKeyboard" style={{ width: `${width}px` }}>
           <div className="VirtualKeyboard__Controls">
             <button className="VirtualKeyboard__Button" onClick={() => this.onOctaveChange(-1)}>octave -</button>
             <button className="VirtualKeyboard__Button" onClick={() => this.onOctaveChange(1)}>octave +</button>

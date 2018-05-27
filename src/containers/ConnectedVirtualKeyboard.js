@@ -4,6 +4,7 @@ import { noteOn, noteOff } from '../actions';
 import VirtualKeyboard from '../components/VirtualKeyboard/VirtualKeyboard';
 
 const mapStateToProps = state => ({
+  contentRect: state.appReducer.get('contentRect'),
   notesOn: state.synthControls.get('notesOn'),
 });
 

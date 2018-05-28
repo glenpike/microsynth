@@ -3,6 +3,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
 import ControlGroup from '../ControlGroup/ControlGroup';
 import RangeControl from '../RangeControl/RangeControl';
+import RotaryKnob from '../RotaryKnob/RotaryKnob';
 
 class FilterControls extends Component {
   static propTypes = {
@@ -36,8 +37,27 @@ class FilterControls extends Component {
             controlName={`resonance-${controlName}`}
             onChange={e => this.onValueChange(e, 'resonance')}
             value={resonance}
-            min={9}
-            max={50}
+            min={0}
+            max={20}
+          />
+        </div>
+        <div className="column pad-left">
+          <RotaryKnob
+            label="Rez"
+            controlName={`resonance-${controlName}`}
+            onChange={e => this.onValueChange(e, 'cutoff')}
+            value={cutoff}
+            max={10000}
+          />
+        </div>
+        <div className="column pad-left">
+          <RotaryKnob
+            label="Rez"
+            controlName={`resonance-${controlName}`}
+            onChange={e => this.onValueChange(e, 'cutoff')}
+            value={resonance}
+            min={0}
+            max={20}
           />
         </div>
       </ControlGroup>

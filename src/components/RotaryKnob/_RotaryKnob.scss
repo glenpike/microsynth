@@ -1,0 +1,29 @@
+.RotaryKnob {
+    // filter: drop-shadow( 0 0 1px $primaryHue );
+
+    &__Track {
+        // stroke: $primaryHue;
+        // stroke-width: 2;
+        fill: $primaryHue;
+    }
+    &__Value {
+        stroke: $indicatorColour;
+        stroke-width: 20;
+        fill: none;
+    }
+    &__Outline {
+        stroke: $primaryHue;
+        stroke-width: 2;
+        fill: none;
+    }
+    &__label {
+        font-size: $baseFontSize / 2;
+        color: $indicatorColour;
+        text-align: center;
+        margin-top: $baseFontSize / 4;
+    }
+    &__Debug {
+        font-size: 0.5em;
+        color: $indicatorColour;
+    }
+}

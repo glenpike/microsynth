@@ -6,7 +6,7 @@ import { selectMidiDevice, unselectMidiDevice } from '../../utils/midi-input';
 
 class MidiInput extends Component {
   static propTypes = {
-    inputs: ImmutablePropTypes.map.isRequired,
+    inputs: ImmutablePropTypes.list.isRequired,
     selectedInputId: PropTypes.any, // eslint-disable-line
     selectedInput: PropTypes.any, // eslint-disable-line
     noteOn: PropTypes.func.isRequired,

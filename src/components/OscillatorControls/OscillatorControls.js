@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
 import ControlGroup from '../ControlGroup/ControlGroup';
-import RangeControl from '../RangeControl/RangeControl';
 import RadioButton from '../RadioButton/RadioButton';
 import RotaryKnob from '../RotaryKnob/RotaryKnob';
 
@@ -61,16 +60,6 @@ class OscillatorControls extends Component {
 
     return (
       <ControlGroup label={label}>
-        <div className="column">
-          <RangeControl
-            label="Detune"
-            controlName={`detune-${controlName}`}
-            onChange={e => this.onDetuneChange(e)}
-            value={Math.round(detune * 100)}
-            min={-100}
-            max={100}
-          />
-        </div>
         <div className="column">
           <RotaryKnob
             label="Detune"

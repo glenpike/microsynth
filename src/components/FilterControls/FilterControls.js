@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
 import ControlGroup from '../ControlGroup/ControlGroup';
-import RangeControl from '../RangeControl/RangeControl';
 import RotaryKnob from '../RotaryKnob/RotaryKnob';
 
 class FilterControls extends Component {
@@ -23,38 +22,19 @@ class FilterControls extends Component {
     return (
       <ControlGroup label={label}>
         <div className="column">
-          <RangeControl
+          <RotaryKnob
             label="Cutoff"
-            controlName={`cutoff-${controlName}`}
+            controlName={`resonance-${controlName}`}
             onChange={e => this.onValueChange(e, 'cutoff')}
             value={cutoff}
             max={10000}
           />
         </div>
         <div className="column pad-left">
-          <RangeControl
+          <RotaryKnob
             label="Rez"
             controlName={`resonance-${controlName}`}
             onChange={e => this.onValueChange(e, 'resonance')}
-            value={resonance}
-            min={0}
-            max={20}
-          />
-        </div>
-        <div className="column pad-left">
-          <RotaryKnob
-            label="Rez"
-            controlName={`resonance-${controlName}`}
-            onChange={e => this.onValueChange(e, 'cutoff')}
-            value={cutoff}
-            max={10000}
-          />
-        </div>
-        <div className="column pad-left">
-          <RotaryKnob
-            label="Rez"
-            controlName={`resonance-${controlName}`}
-            onChange={e => this.onValueChange(e, 'cutoff')}
             value={resonance}
             min={0}
             max={20}

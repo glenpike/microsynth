@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
 import ControlGroup from '../ControlGroup/ControlGroup';
-import RangeControl from '../RangeControl/RangeControl';
+import RotaryKnob from '../RotaryKnob/RotaryKnob';
 
 class VolumeControls extends Component {
   static propTypes = {
@@ -24,7 +24,7 @@ class VolumeControls extends Component {
     return (
       <ControlGroup label={label}>
         <div className="column">
-          <RangeControl
+          <RotaryKnob
             label="Volume"
             controlName={`level-${controlName}`}
             onChange={e => this.onValueChange(e, 'level')}
@@ -33,7 +33,7 @@ class VolumeControls extends Component {
           />
         </div>
         <div className="column pad-left">
-          <RangeControl
+          <RotaryKnob
             label="Pan"
             controlName={`pan-${controlName}`}
             onChange={e => this.onValueChange(e, 'pan')}

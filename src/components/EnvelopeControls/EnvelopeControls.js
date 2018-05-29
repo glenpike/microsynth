@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
 import ControlGroup from '../ControlGroup/ControlGroup';
-import RangeControl from '../RangeControl/RangeControl';
+import RotaryKnob from '../RotaryKnob/RotaryKnob';
 
 class EnvelopeControls extends Component {
   static propTypes = {
@@ -26,7 +26,7 @@ class EnvelopeControls extends Component {
     return (
       <ControlGroup label={label}>
         <div className="column">
-          <RangeControl
+          <RotaryKnob
             label="Attack"
             controlName={`attack-${controlName}`}
             onChange={e => this.onValueChange(e, 'attack')}
@@ -34,7 +34,7 @@ class EnvelopeControls extends Component {
           />
         </div>
         <div className="column pad-left">
-          <RangeControl
+          <RotaryKnob
             label="Decay"
             controlName={`decay-${controlName}`}
             onChange={e => this.onValueChange(e, 'decay')}
@@ -42,7 +42,7 @@ class EnvelopeControls extends Component {
           />
         </div>
         <div className="column pad-left">
-          <RangeControl
+          <RotaryKnob
             label="Sustain"
             controlName={`sustain-${controlName}`}
             onChange={e => this.onValueChange(e, 'sustain')}
@@ -50,7 +50,7 @@ class EnvelopeControls extends Component {
           />
         </div>
         <div className="column pad-left">
-          <RangeControl
+          <RotaryKnob
             label="Release"
             controlName={`release-${controlName}`}
             onChange={e => this.onValueChange(e, 'release')}

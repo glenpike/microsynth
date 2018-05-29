@@ -35,7 +35,7 @@ Things that I'd like to do.
 
 - Functionality
   - [ ] Only the keyboard works on touch-screen, the other controls are quite small.
-  - [ ] Better rotary controls - these don't feel right in browser.  They might be okay on a touch screen, but don't respond to touch.
+  - [x] Better rotary controls - these don't feel right in browser.  They might be okay on a touch screen, but don't respond to touch. (Partially done - working in browser, touch + scroll issues.)
   - [ ] Ability to save and load a 'patch' - use local-storage or similar.
 
 - Code

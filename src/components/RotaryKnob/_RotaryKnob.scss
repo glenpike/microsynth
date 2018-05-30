@@ -22,6 +22,7 @@
     }
     &__label,
     &__Debug {
+        @include preventSelection;
         font-size: $baseFontSize / 2;
         line-height: 1.2em;
         color: $indicatorColour;

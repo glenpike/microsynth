@@ -13,6 +13,7 @@
         margin-right: $baseFontSize / 4;
     }
     &__Octave {
+        @include preventSelection;
         font-size: $baseFontSize * 0.65;
         padding: 0 $baseLineHeight * 0.5;
         color: $primaryHue;

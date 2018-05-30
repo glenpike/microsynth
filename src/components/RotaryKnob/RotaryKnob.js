@@ -46,6 +46,17 @@ const describeKnobDonut = ({
   return `${line1} ${outerArc} ${line2} ${innerArc}`;
 };
 
+/* Will return an x, y position based on the type of
+   event, e.g. TouchEvent vs MouseEvent
+*/
+const getEventCoords = (e) => {
+  let clientRoot = e;
+  if (e.changedTouches && e.changedTouches.length) {
+    [clientRoot] = e.changedTouches;
+  }
+  return { x: clientRoot.clientX, y: clientRoot.clientY };
+};
+
 class RotaryKnob extends Component {
   static propTypes = {
     label: PropTypes.string.isRequired,
@@ -67,10 +78,8 @@ class RotaryKnob extends Component {
       isInteracting: false,
       mouseMoveListener: e => this.onMouseMove(e),
       mouseUpListener: e => this.onMouseUp(e),
-      // touchMoveListener: e => this.onTouchMove(e),
-      // touchEndListener: e => this.onMouseUp(e),
-      x: 0,
-      y: 0,
+      touchMoveListener: e => this.onMouseMove(e),
+      touchEndListener: e => this.onMouseUp(e),
     };
     // Radius should account for border - we
     // could inline style that?
@@ -91,49 +100,35 @@ class RotaryKnob extends Component {
     this.killListenersIfNeeded();
   }
 
-  // onTouchStart(e) {
-  //   e.preventDefault();
-  //   this.handleChangeStart(e.changedTouches[0].clientX, e.changedTouches[0].clientY);
-  // }
-
   onMouseDown(e) {
     e.preventDefault();
-    this.handleChangeStart(e.clientX, e.clientY);
+    // console.log('mousedown');
+    this.calcValueChange(getEventCoords(e));
+    const {
+      mouseMoveListener, mouseUpListener, touchMoveListener, touchEndListener,
+    } = this.state;
+    document.addEventListener('mousemove', mouseMoveListener);
+    document.addEventListener('mouseup', mouseUpListener);
+    document.addEventListener('touchmove', touchMoveListener);
+    document.addEventListener('touchend', touchEndListener);
+    this.setState({
+      isInteracting: true,
+    });
   }
 
   onMouseUp(e) {
     e.preventDefault();
+    // console.log('mouseup');
     this.killListenersIfNeeded();
   }
-
-  // onTouchMove(e) {
-  //   const { isInteracting } = this.state;
-  //   if (isInteracting) {
-  //     e.preventDefault();
-  //     this.calcValueChange(e.changedTouches[0].clientX, e.changedTouches[0].clientY);
-  //   }
-  // }
 
   onMouseMove(e) {
     const { isInteracting } = this.state;
     if (isInteracting) {
       e.preventDefault();
-      this.calcValueChange(e.clientX, e.clientY);
+      // console.log('mousemove');
+      this.calcValueChange(getEventCoords(e));
     }
-  }
-
-  handleChangeStart(x, y) {
-    this.calcValueChange(x, y);
-    const {
-      mouseMoveListener, mouseUpListener, touchMoveListener, touchEndListener,
-    } = this.state;
-    window.addEventListener('mousemove', mouseMoveListener);
-    window.addEventListener('mouseup', mouseUpListener);
-    window.addEventListener('touchmove', touchMoveListener);
-    window.addEventListener('touchend', touchEndListener);
-    this.setState({
-      isInteracting: true,
-    });
   }
 
   killListenersIfNeeded() {
@@ -142,15 +137,15 @@ class RotaryKnob extends Component {
       const {
         mouseMoveListener, mouseUpListener, touchMoveListener, touchEndListener,
       } = this.state;
-      window.removeEventListener('mousemove', mouseMoveListener);
-      window.removeEventListener('mouseup', mouseUpListener);
-      window.removeEventListener('touchmove', touchMoveListener);
-      window.removeEventListener('touchend', touchEndListener);
+      document.removeEventListener('mousemove', mouseMoveListener);
+      document.removeEventListener('mouseup', mouseUpListener);
+      document.removeEventListener('touchmove', touchMoveListener);
+      document.removeEventListener('touchend', touchEndListener);
       this.setState({ isInteracting: false });
     }
   }
 
-  calcValueChange(x, y) {
+  calcValueChange({ x, y }) {
     /*
       Works out the angle of the mouse position
       relative to the centre of the Knob, then
@@ -183,7 +178,7 @@ class RotaryKnob extends Component {
     const {
       value, min, max, label,
     } = this.props;
-    const { isInteracting, x, y } = this.state;
+    const { isInteracting } = this.state;
     const valueRatio = (value - min) / (max - min); // TODO: Check this for -ve!
     const valueAngle = Math.round((valueRatio * (endAngle - startAngle))) + startAngle;
     const arcLine = ((outerRadius - innerRadius) / 2) + innerRadius;
@@ -204,7 +199,7 @@ class RotaryKnob extends Component {
           width="50"
           height="50"
           onMouseDown={e => this.onMouseDown(e)}
-          onTouchStart={null /* e => this.onMouseDown(e) */}
+          onTouchStart={e => this.onMouseDown(e)}
         >
           <g transform="rotate(180)">
             <g>
@@ -233,11 +228,6 @@ class RotaryKnob extends Component {
           {label}
           <br />{Math.round(value)}
         </p>
-        {
-          /* <p className="RotaryKnob__Debug">
-            {x}, {y}
-          </p> */
-        }
       </div>
     );
   }

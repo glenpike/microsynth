@@ -1,44 +1,17 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { describeArc, drawArc, polarToCartesian, DEGREES_TO_RADIANS } from '../../utils/svg-utils';
 
 // https://codepen.io/anon/pen/vjoqzb
 // http://jsbin.com/kopisonewi/2/edit?html,js,output
 
-const DEGREES_TO_RADIANS = Math.PI / 180.0;
-const polarToCartesian = (centerX, centerY, radius, angleInDegrees) => {
-  const angleInRadians = (angleInDegrees - 90) * DEGREES_TO_RADIANS;
-
-  return {
-    x: centerX + (radius * Math.cos(angleInRadians)),
-    y: centerY + (radius * Math.sin(angleInRadians)),
-  };
-};
-
-const drawArc = (end, radius, largeArcFlag, sweep) => {
-  return `A ${radius} ${radius} 0 ${largeArcFlag} ${sweep} ${end.x} ${end.y}`;
-};
-
-const describeArc = (x, y, radius, startAngle, endAngle) => {
-  const start = polarToCartesian(x, y, radius, endAngle);
-  const end = polarToCartesian(x, y, radius, startAngle);
-
-  let largeArcFlag = 0;
-  if (endAngle >= startAngle) {
-    largeArcFlag = endAngle - startAngle <= 180 ? 0 : 1;
-  } else {
-    largeArcFlag = (endAngle + 360.0) - startAngle <= 180 ? 0 : 1;
-  }
-  const arc = drawArc(end, radius, largeArcFlag, 0);
-  return `M ${start.x} ${start.y} ${arc}`;
-};
-
 const describeKnobDonut = ({
   innerRadius, outerRadius, startAngle, endAngle,
 }) => {
-  const start1 = polarToCartesian(0, 0, outerRadius, endAngle);
-  const end1 = polarToCartesian(0, 0, outerRadius, startAngle);
-  const start2 = polarToCartesian(0, 0, innerRadius, endAngle);
-  const end2 = polarToCartesian(0, 0, innerRadius, startAngle);
+  const start1 = polarToCartesian(outerRadius, endAngle);
+  const end1 = polarToCartesian(outerRadius, startAngle);
+  const start2 = polarToCartesian(innerRadius, endAngle);
+  const end2 = polarToCartesian(innerRadius, startAngle);
   const outerArc = drawArc(end1, outerRadius, 1, 0);
   const innerArc = drawArc(start2, innerRadius, 1, 1);
   const line1 = `M ${start2.x} ${start2.y} L ${start1.x} ${start1.y}`;
@@ -182,7 +155,7 @@ class RotaryKnob extends Component {
     const valueRatio = (value - min) / (max - min); // TODO: Check this for -ve!
     const valueAngle = Math.round((valueRatio * (endAngle - startAngle))) + startAngle;
     const arcLine = ((outerRadius - innerRadius) / 2) + innerRadius;
-    const valuePath = describeArc(0, 0, arcLine, startAngle, valueAngle);
+    const valuePath = describeArc(arcLine, startAngle, valueAngle);
     const maskStyle = {
       fill: '#fff',
     };

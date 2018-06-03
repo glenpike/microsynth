@@ -12,17 +12,19 @@ export const initialState = Immutable.fromJS({
     'oscillator-1': {
       shape: 'sawtooth',
       detune: 0,
+      pulseWidth: 0.5,
     },
     'oscillator-2': {
-      shape: 'square',
+      shape: 'custom',
       detune: 0,
+      pulseWidth: 0.5,
     },
     modulation: {
       type: 'ring',
     },
     filter: {
       type: 'lowpass',
-      cutoff: 500,
+      cutoff: 3000,
       resonance: 2,
     },
     envelope: {

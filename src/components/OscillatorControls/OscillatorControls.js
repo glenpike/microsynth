@@ -12,8 +12,8 @@ const waveTypes = [
     value: 'sawtooth',
   },
   {
-    label: 'Square',
-    value: 'square',
+    label: 'Pulse',
+    value: 'custom',
   },
   {
     label: 'Triangle',
@@ -45,9 +45,14 @@ class OscillatorControls extends Component {
     const { controlChange, controlName } = this.props;
     controlChange(controlName, 'detune', value / 100);
   }
+  onPWMWidthChange(value) {
+    const { controlChange, controlName } = this.props;
+    controlChange(controlName, 'pulseWidth', value / 100);
+  }
   render() {
     const { controlValues, label, controlName } = this.props;
-    const { shape, detune } = controlValues.get(controlName).toJS();
+    const { shape, detune, pulseWidth } = controlValues.get(controlName).toJS();
+    const disabled = shape !== 'custom';
     const buttons = waveTypes.map(({ label: buttonLabel, value }) => (
       <RadioButton
         key={`${value}-${controlName}`}
@@ -72,6 +77,17 @@ class OscillatorControls extends Component {
         </div>
         <div className="column pad-left">
           {buttons}
+        </div>
+        <div className="column pad-left">
+          <RotaryKnob
+            label="Pulse W"
+            controlName={`pulseWidth-${controlName}`}
+            onChange={e => this.onPWMWidthChange(e)}
+            value={Math.round(pulseWidth * 100)}
+            min={1}
+            max={100}
+            disabled={disabled}
+          />
         </div>
       </ControlGroup>
     );

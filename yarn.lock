@@ -2273,6 +2273,10 @@ dotenv@4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-4.0.0.tgz#864ef1379aced55ce6f95debecdce179f7a0cd1d"
 
+"dsp@https://github.com/corbanbrook/dsp.js.git":
+  version "1.0.0"
+  resolved "https://github.com/corbanbrook/dsp.js.git#051f341d8e1d05515efecb1851bbc862decf02bc"
+
 duplexer3@^0.1.4:
   version "0.1.4"
   resolved "https://registry.yarnpkg.com/duplexer3/-/duplexer3-0.1.4.tgz#ee01dd1cac0ed3cbc7fdbea37dc0a8f1ce002ce2"

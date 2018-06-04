@@ -37,12 +37,14 @@ class RotaryKnob extends Component {
     min: PropTypes.number,
     max: PropTypes.number,
     onChange: PropTypes.func.isRequired,
+    disabled: PropTypes.bool,
   };
 
   static defaultProps = {
     value: 0,
     min: 0,
     max: 128,
+    disabled: false,
   };
 
   constructor(props) {
@@ -75,6 +77,9 @@ class RotaryKnob extends Component {
 
   onMouseDown(e) {
     e.preventDefault();
+    if (this.props.disabled) {
+      return;
+    }
     // console.log('mousedown');
     this.calcValueChange(getEventCoords(e));
     const {
@@ -149,7 +154,7 @@ class RotaryKnob extends Component {
       startAngle, endAngle, innerRadius, outerRadius,
     } = this.config;
     const {
-      value, min, max, label,
+      value, min, max, label, disabled,
     } = this.props;
     const { isInteracting } = this.state;
     const valueRatio = (value - min) / (max - min); // TODO: Check this for -ve!
@@ -160,12 +165,12 @@ class RotaryKnob extends Component {
       fill: '#fff',
     };
     return (
-      <div>
+      <div className={`RotaryKnob${disabled ? ' RotaryKnob--disabled' : ''}`}
+      >
         <svg
           ref={
             node => this.node = node // eslint-disable-line no-return-assign
           }
-          className="RotaryKnob"
           xmlns="http://www.w3.org/2000/svg"
           xmlnsXlink="http://www.w3.org/1999/xlink"
           viewBox="-50 -50 100 100"

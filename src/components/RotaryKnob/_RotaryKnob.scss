@@ -1,8 +1,6 @@
-.RotaryKnob {
-    // filter: drop-shadow( 0 0 1px $primaryHue );
+.RotaryKnob,
+.RotaryKnob--disabled, {
     &__Track {
-        // stroke: $primaryHue;
-        // stroke-width: 2;
         fill: $primaryHue;
     }
     &__Value {
@@ -30,5 +28,21 @@
         padding: 0;
         margin-top: -$baseFontSize / 4;
         margin-bottom: 0;
+    }
+}
+
+.RotaryKnob--disabled {
+    opacity: 0.5;
+    .RotaryKnob__Track {
+        fill: $lightTextColour;
+    }
+    .RotaryKnob__Value {
+        stroke: $mediumTextColour;
+    }
+    .RotaryKnob__Outline {
+        stroke: $lightTextColour;
+    }
+    .RotaryKnob__label {
+        color: $lightTextColour;
     }
 }

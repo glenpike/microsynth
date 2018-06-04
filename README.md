@@ -34,8 +34,8 @@ Things that I'd like to do.
 - [ ] Some testing see https://github.com/glenpike/react-maths/blob/develop/src/components/Game.test.js for an early start on component testing with create-react-app
 
 - Functionality
-  - [ ] Only the keyboard works on touch-screen, the other controls are quite small.
-  - [x] Better rotary controls - these don't feel right in browser.  They might be okay on a touch screen, but don't respond to touch. (Partially done - working in browser, touch + scroll issues.)
+  - [x] Only the keyboard works on touch-screen, the other controls are quite small.
+  - [x] Better rotary controls - these don't feel right in browser.  They might be okay on a touch screen, but don't respond to touch. (Working in android, but scroll issues / need to handle 'zoom')
   - [ ] Ability to save and load a 'patch' - use local-storage or similar.
 
 - Code
@@ -59,7 +59,7 @@ Things that I'd like to do.
 
 - Audio
   - [ ] Some audio FX on the synth...
-  - [ ] Fatten up the oscillator sounds.
+  - [x] Fatten up the oscillator sounds.
   - [ ] Add an LFO
   - [ ] Polyphony (with Envelopes for each!)?
   - [ ] Drop in synth configurations, e.g. a JSON graph describing the modules and settings (modular heaven or hell?)

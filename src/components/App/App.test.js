@@ -1,10 +1,9 @@
 // import React from 'react';
 // import ReactDOM from 'react-dom';
-// TODO: a problem with Jest & the react-rotary-knob component
-// means this causes test failure.
-// https://github.com/facebook/jest/issues/2550 has a fix, but
-// we can't use the 'transformIgnorePatterns' in package.json
-// because CRA doesn't support it - we'd have to 'eject'
+// TODO: We need to wrap the App in a <Provider>
+// in order to be able to render all the connected components:
+// https://redux.js.org/recipes/writing-tests#connected-components
+// https://github.com/reduxjs/react-redux/blob/master/docs/api.md#provider-store
 // import App from './App';
 
 // it('renders without crashing', () => {

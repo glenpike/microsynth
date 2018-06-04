@@ -202,7 +202,7 @@ class RotaryKnob extends Component {
             </g>
           </g>
         </svg>
-        <p className="RotaryKnob__label">
+        <p className="RotaryKnob__Label">
           {label}
           <br />{Math.round(value)}
         </p>

@@ -18,7 +18,7 @@
         stroke-width: 3;
         fill: none;
     }
-    &__label,
+    &__Label,
     &__Debug {
         @include preventSelection;
         font-size: $baseFontSize / 2;
@@ -42,7 +42,7 @@
     .RotaryKnob__Outline {
         stroke: $lightTextColour;
     }
-    .RotaryKnob__label {
+    .RotaryKnob__Label {
         color: $lightTextColour;
     }
 }

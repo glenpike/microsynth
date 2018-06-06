@@ -8,9 +8,8 @@ const documentHTML = '<!doctype html><html><body><div id="root"></div></body></h
 const doc = jsdom(documentHTML);
 
 describe('RotaryKnob', () => {
-  const onChange = jest.fn();
   const create = (params) => {
-    const { label = 'test', disabled = false, value = 0 } = params || {};
+    const { onChange = () => {}, label = 'test', disabled = false, value = 0 } = params || {};
     return mount( // eslint-disable-line function-paren-newline
       <RotaryKnob label={label} onChange={onChange} disabled={disabled} value={value} />,
       { attachTo: doc.getElementById('root') },
@@ -61,14 +60,21 @@ describe('RotaryKnob', () => {
     expect(label.text()).to.contain(value);
   });
 
-  // it('should send a value on mouseDown', () => {
-  //   const wrapper = create({ value: 40 });
-  //   const top = doc.querySelector('svg');
-  //   // const top = wrapper.find('svg').at(0).getElement();
-  //   const mouseMove = new Event('mousedown');  // creates a new event
-  //   mouseMove.clientX = 20;
-  //   mouseMove.clientY = 25;
-  //   top.dispatchEvent(mouseMove);
-  //   expect(onChange).to.have.been.called();
-  // });
+  it('should send a value on mouseDown', () => {
+    const onChange = jest.fn();
+    const wrapper = create({ value: 40, onChange });
+    const svg = wrapper.find('svg');
+    // if we click it top-centre, that's halfway
+    svg.simulate('mousedown', { clientX: 25, clientY: -20 });
+    expect(onChange).toHaveBeenCalledWith(64);
+  });
+
+  it('shouldn\'t send a value on mouseDown if disabled', () => {
+    const onChange = jest.fn();
+    const wrapper = create({ value: 40, disabled: true, onChange });
+    const svg = wrapper.find('svg');
+    // if we click it top-centre, that's halfway
+    svg.simulate('mousedown', { clientX: 25, clientY: -20 });
+    expect(onChange).toHaveBeenCalledTimes(0);
+  });
 });

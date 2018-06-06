@@ -36,6 +36,8 @@ class RotaryKnob extends Component {
     value: PropTypes.number,
     min: PropTypes.number,
     max: PropTypes.number,
+    width: PropTypes.number,
+    height: PropTypes.number,
     onChange: PropTypes.func.isRequired,
     disabled: PropTypes.bool,
   };
@@ -44,6 +46,8 @@ class RotaryKnob extends Component {
     value: 0,
     min: 0,
     max: 128,
+    width: 50,
+    height: 50,
     disabled: false,
   };
 
@@ -80,7 +84,6 @@ class RotaryKnob extends Component {
     if (this.props.disabled) {
       return;
     }
-    // console.log('mousedown');
     this.calcValueChange(getEventCoords(e));
     const {
       mouseMoveListener, mouseUpListener, touchMoveListener, touchEndListener,
@@ -130,9 +133,11 @@ class RotaryKnob extends Component {
       maps this back to a value.
     */
     const { startAngle, endAngle } = this.config;
+    const { width, height } = this.props;
     const pos = this.node.getBoundingClientRect();
-    const centreX = pos.x + (pos.width / 2);
-    const centreY = pos.y + (pos.height / 2);
+    // console.log(`calcValueChange ${x} ${y}`, pos);
+    const centreX = pos.left + (width / 2);
+    const centreY = pos.top + (height / 2);
     const dX = x - centreX;
     const dY = y - centreY;
     // Because we rotated the SVG 180, we remap the angle (mouse 0 is +x axis)
@@ -154,7 +159,7 @@ class RotaryKnob extends Component {
       startAngle, endAngle, innerRadius, outerRadius,
     } = this.config;
     const {
-      value, min, max, label, disabled,
+      value, min, max, label, disabled, width, height,
     } = this.props;
     const { isInteracting } = this.state;
     const valueRatio = (value - min) / (max - min); // TODO: Check this for -ve!
@@ -174,8 +179,8 @@ class RotaryKnob extends Component {
           xmlns="http://www.w3.org/2000/svg"
           xmlnsXlink="http://www.w3.org/1999/xlink"
           viewBox="-50 -50 100 100"
-          width="50"
-          height="50"
+          width={width}
+          height={height}
           onMouseDown={e => this.onMouseDown(e)}
           onTouchStart={e => this.onMouseDown(e)}
         >

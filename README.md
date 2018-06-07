@@ -31,7 +31,8 @@ One component has unit tests...
 
 Things that I'd like to do.
 
-- [ ] Some testing see https://github.com/glenpike/react-maths/blob/develop/src/components/Game.test.js for an early start on component testing with create-react-app
+- [x] Have some testing of components, particularly the RotaryKnob.  Need to work on Actions / Reducers along with other
+components.
 
 - Functionality
   - [x] Only the keyboard works on touch-screen, the other controls are quite small.

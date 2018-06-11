@@ -2,26 +2,34 @@ import React, { Component } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
 import ControlGroup from '../ControlGroup/ControlGroup';
-import RadioButton from '../RadioButton/RadioButton';
+import IconRadioButton from '../IconRadioButton/IconRadioButton';
 import RotaryKnob from '../RotaryKnob/RotaryKnob';
+// import squareWave from '../../images/square-wave.svg';
+// import sawtoothWave from '../../images/sawtooth-wave.svg';
+import * as Icons from '../Icons/Icons';
 
+const { IconTypes } = Icons;
 // TODO: this might need to be somewhere else?
 const waveTypes = [
   {
     label: 'Sawtooth',
     value: 'sawtooth',
+    icon: IconTypes.SAWTOOTH_WAVE,
   },
   {
     label: 'Pulse',
     value: 'custom',
+    icon: IconTypes.SQUARE_WAVE,
   },
   {
     label: 'Triangle',
     value: 'triangle',
+    icon: IconTypes.TRIANGLE_WAVE,
   },
   {
     label: 'Sine',
     value: 'sine',
+    icon: IconTypes.SINE_WAVE,
   },
 ];
 
@@ -53,10 +61,11 @@ class OscillatorControls extends Component {
     const { controlValues, label, controlName } = this.props;
     const { shape, detune, pulseWidth } = controlValues.get(controlName).toJS();
     const disabled = shape !== 'custom';
-    const buttons = waveTypes.map(({ label: buttonLabel, value }) => (
-      <RadioButton
+    const buttons = waveTypes.map(({ label: buttonLabel, value, icon }) => (
+      <IconRadioButton
         key={`${value}-${controlName}`}
         onChange={e => this.onShapeChange(e)}
+        icon={icon}
         label={buttonLabel}
         value={value}
         isChecked={value === shape}
@@ -65,29 +74,33 @@ class OscillatorControls extends Component {
 
     return (
       <ControlGroup label={label}>
-        <div className="column">
-          <RotaryKnob
-            label="Detune"
-            controlName={`detune-${controlName}`}
-            onChange={e => this.onDetuneChange(e)}
-            value={Math.round(detune * 100)}
-            min={-100}
-            max={100}
-          />
+        <div className="clear">
+          <div className="column">
+            <RotaryKnob
+              label="Detune"
+              controlName={`detune-${controlName}`}
+              onChange={e => this.onDetuneChange(e)}
+              value={Math.round(detune * 100)}
+              min={-100}
+              max={100}
+            />
+          </div>
+          <div className="column pad-left">
+            <RotaryKnob
+              label="Pulse W"
+              controlName={`pulseWidth-${controlName}`}
+              onChange={e => this.onPWMWidthChange(e)}
+              value={Math.round(pulseWidth * 100)}
+              min={1}
+              max={100}
+              disabled={disabled}
+            />
+          </div>
         </div>
-        <div className="column pad-left">
-          {buttons}
-        </div>
-        <div className="column pad-left">
-          <RotaryKnob
-            label="Pulse W"
-            controlName={`pulseWidth-${controlName}`}
-            onChange={e => this.onPWMWidthChange(e)}
-            value={Math.round(pulseWidth * 100)}
-            min={1}
-            max={100}
-            disabled={disabled}
-          />
+        <div className="OscillatorShapes clear">
+          <div className="column">
+            {buttons}
+          </div>
         </div>
       </ControlGroup>
     );

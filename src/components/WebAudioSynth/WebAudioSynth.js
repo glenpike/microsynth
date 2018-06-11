@@ -192,6 +192,9 @@ class WebAudioSynth extends Component {
         sustain,
         release,
       },
+      'oscillator-2': {
+        offset,
+      },
     } = controlValues.toJS();
     const now = this.audioContext.currentTime;
 
@@ -199,7 +202,7 @@ class WebAudioSynth extends Component {
       case NOTE_ON: {
         const frequency = getPitch(event.noteNum);
         this.osc1.frequency.setValueAtTime(frequency, this.audioContext.currentTime);
-        this.osc2.frequency.setValueAtTime(frequency, this.audioContext.currentTime);
+        this.osc2.frequency.setValueAtTime(frequency * offset, this.audioContext.currentTime);
         // fire up the EG.
         const { gain } = this.vca;
         gain.cancelScheduledValues(now);

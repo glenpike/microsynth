@@ -25,6 +25,29 @@ const waveTypes = [
   },
 ];
 
+const offsets = [
+  {
+    label: '-24',
+    value: 0.25,
+  },
+  {
+    label: '-12',
+    value: 0.5,
+  },
+  {
+    label: '0',
+    value: 0,
+  },
+  {
+    label: '+12',
+    value: 2.0,
+  },
+  {
+    label: '+24',
+    value: 4.0,
+  },
+];
+
 class OscillatorControls extends Component {
   static propTypes = {
     label: PropTypes.string.isRequired,
@@ -49,9 +72,15 @@ class OscillatorControls extends Component {
     const { controlChange, controlName } = this.props;
     controlChange(controlName, 'pulseWidth', value / 100);
   }
+  onOffsetChange(e) {
+    const { controlChange, controlName } = this.props;
+    controlChange(controlName, 'offset', e.target.value);
+  }
   render() {
     const { controlValues, label, controlName } = this.props;
-    const { shape, detune, pulseWidth } = controlValues.get(controlName).toJS();
+    const {
+      shape, detune, pulseWidth, offset,
+    } = controlValues.get(controlName).toJS();
     const disabled = shape !== 'custom';
     const buttons = waveTypes.map(({ label: buttonLabel, value }) => (
       <RadioButton
@@ -60,7 +89,17 @@ class OscillatorControls extends Component {
         label={buttonLabel}
         value={value}
         isChecked={value === shape}
-        id={controlName}
+        id={`${controlName}-shape`}
+      />));
+
+    const offsetButtons = offsets.map(({ label: buttonLabel, value }) => (
+      <RadioButton
+        key={`${value}-${controlName}`}
+        onChange={e => this.onOffsetChange(e)}
+        label={buttonLabel}
+        value={value}
+        isChecked={value == offset /* eslint-disable-line */}
+        id={`${controlName}-offset`}
       />));
 
     return (
@@ -74,6 +113,9 @@ class OscillatorControls extends Component {
             min={-100}
             max={100}
           />
+        </div>
+        <div className="column pad-left">
+          {offsetButtons}
         </div>
         <div className="column pad-left">
           {buttons}

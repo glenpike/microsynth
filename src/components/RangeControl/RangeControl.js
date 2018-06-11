@@ -14,7 +14,6 @@ const RangeControl = (props) => {
   } = props;
   return (
     <div className="RangeControl">
-      { /* <Knob style={knobstyle} className="RangeControl__knob" skin={skins.s11} defaultValue={value} min={min} max={max} onChange={onChange} unlockDistance="25" /> */}
       <Knob className="RangeControl__Knob" onChange={onChange} defaultValue={value} min={min} max={max} />
       <div className="RangeControl__label">{label} {Math.round(value)}</div>
     </div>

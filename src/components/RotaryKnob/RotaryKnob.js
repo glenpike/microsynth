@@ -63,7 +63,7 @@ class RotaryKnob extends Component {
     // Radius should account for border - we
     // could inline style that?
     // Should this be in state?
-    const outerRadius =  this.props.width - 2;
+    const outerRadius = this.props.width - 2;
     this.config = {
       startAngle: 30,
       endAngle: 330,
@@ -171,8 +171,7 @@ class RotaryKnob extends Component {
       fill: '#fff',
     };
     return (
-      <div className={`RotaryKnob${disabled ? ' RotaryKnob--disabled' : ''}`}
-      >
+      <div className={`RotaryKnob${disabled ? ' RotaryKnob--disabled' : ''}`}>
         <svg
           ref={
             node => this.node = node // eslint-disable-line no-return-assign

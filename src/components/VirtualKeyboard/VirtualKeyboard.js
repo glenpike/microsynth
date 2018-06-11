@@ -112,7 +112,7 @@ class VirtualKeyboard extends Component {
   }
 
   render() {
-    const PADDING=24; // need to get this from the CSS?
+    const PADDING = 24; // need to get this from the CSS?
     const { notesOn, contentRect } = this.props;
     const width = contentRect.getIn(['client', 'width'], 100) - PADDING;
     const { octave } = this.state;

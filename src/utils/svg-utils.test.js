@@ -52,7 +52,8 @@ describe('svg-utils', () => {
       const arc = describeArc(radius, 0, 45);
       const match = /M ([^\s]+) ([^\s]+) A ([^\s]+) ([^\s]+) ([^\s]+) ([^\s]+) ([^\s]+) ([^\s]+) ([^\s]+)/.exec(arc);
       expect(match).to.not.equal(null);
-      const [ whole, x, y, rad1, rad2, ignore, sweep, largeArc, endX, endY ] = match;
+      const [whole, x, y, rad1, rad2, ignore, sweep, largeArc, endX, endY] = match;
+      expect(whole).to.equal(arc);
       expect((+x).toFixed(3)).to.equal(sqrt2);
       expect((-y).toFixed(3)).to.equal(sqrt2);
       expect(+rad1).to.equal(radius);

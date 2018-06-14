@@ -48,7 +48,7 @@ components.
 - Styling:
   - [ ] Consider a more tight framework approach.  The alignment of components and their style works okay and it's moving towards an ITCSS approach.
   - [ ] Midi device selector (it's a select and needs to be progressively enhanced)
-  - [ ] Nicer buttons - indicators for wave shape, etc. (Icons & leds like https://darker-things.glitch.me/ ?)
+  - [x] Nicer buttons - indicators for wave shape, etc. (Icons & leds like https://darker-things.glitch.me/ ?)
   - [x] More responsive - keyboard doesn't collapse because we scroll it.
 
 - MIDI

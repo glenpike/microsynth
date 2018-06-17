@@ -17,8 +17,8 @@ const getPWMWave = (pulseWidth = 0.5) => {
   dft.forward(samples);
   const { real, imag } = dft;
   return {
-    real,
-    imag,
+    real: Float32Array.from(real),
+    imag: Float32Array.from(imag),
   };
 };
 

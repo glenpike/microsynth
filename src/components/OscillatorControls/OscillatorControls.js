@@ -4,8 +4,6 @@ import PropTypes from 'prop-types';
 import ControlGroup from '../ControlGroup/ControlGroup';
 import IconRadioButton from '../IconRadioButton/IconRadioButton';
 import RotaryKnob from '../RotaryKnob/RotaryKnob';
-// import squareWave from '../../images/square-wave.svg';
-// import sawtoothWave from '../../images/sawtooth-wave.svg';
 import * as Icons from '../Icons/Icons';
 
 const { IconTypes } = Icons;

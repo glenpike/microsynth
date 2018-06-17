@@ -38,6 +38,7 @@ class WebAudioSynth extends Component {
       window.webkitAudioContext)();
     this.createSynth();
     this.setupControlHandlers();
+    this.notesOn = 0;
   }
 
   componentWillReceiveProps(props) {
@@ -200,7 +201,7 @@ class WebAudioSynth extends Component {
         const frequency = getPitch(event.noteNum);
         this.osc1.frequency.setValueAtTime(frequency, this.audioContext.currentTime);
         this.osc2.frequency.setValueAtTime(frequency, this.audioContext.currentTime);
-        // fire up the EG.
+        // fire up the EG (always retriggers!)
         const { gain } = this.vca;
         gain.cancelScheduledValues(now);
         gain.setValueAtTime(0, now);
@@ -208,12 +209,17 @@ class WebAudioSynth extends Component {
         // (attack: 0-20s, decay & release 1ms - 60s(?)
         gain.linearRampToValueAtTime(1.0, now + (attack / 100));
         gain.linearRampToValueAtTime((sustain / 100), now + (attack / 100) + (decay / 100));
+        this.notesOn += 1;
         break;
       }
-      // FIXME: 2 notes on, then one off affects envelope of 2nd note!
       case NOTE_OFF: {
-        const { gain } = this.vca;
-        gain.linearRampToValueAtTime(0, now + (release / 100));
+        // TODO? won't return to playing a note that's held down, check on other synths?
+        this.notesOn -= 1;
+        if (this.notesOn <= 0) {
+          const { gain } = this.vca;
+          gain.linearRampToValueAtTime(0, now + (release / 100));
+          this.notesOn = 0;
+        }
         break;
       }
       case CONTROL_CHANGE: {

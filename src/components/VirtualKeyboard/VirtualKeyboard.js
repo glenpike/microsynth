@@ -33,7 +33,7 @@ class VirtualKeyboard extends Component {
   };
   constructor(props) {
     super(props);
-    this.state = { octave: 2 };
+    this.state = { octave: 2, keysDown: {} };
   }
   componentWillMount() {
     this.setupKeyboard();
@@ -56,6 +56,15 @@ class VirtualKeyboard extends Component {
     noteOff(number);
   }
 
+  onMouseOut(number, event) {
+    const { noteOff, notesOn } = this.props;
+    const noteOnValues = notesOn.map(noteOn => noteOn.noteNum).toJS();
+    event.preventDefault();
+    if (noteOnValues.indexOf(number) !== -1) {
+      noteOff(number);
+    }
+  }
+
   onOctaveChange(amount) {
     const { octave } = this.state;
     const newOctave = Math.min(Math.max(0, (octave + amount)), 5);
@@ -65,23 +74,26 @@ class VirtualKeyboard extends Component {
   }
 
   onKeyDown(e) {
-    if (e.repeat) {
+    const { octave, keysDown } = this.state;
+    if (keysDown[e.code]) {
       return;
     }
+    keysDown[e.code] = true;
     const { noteOn } = this.props;
-    const { octave } = this.state;
     let note = this.keyboardToNotes[e.code];
     if (typeof note !== 'undefined') {
       note += octave * 12;
       noteOn(note);
     }
+    this.setState({
+      keysDown,
+    });
   }
 
   onKeyUp(e) {
-    const { octave } = this.state;
+    const { octave, keysDown } = this.state;
     const { noteOff } = this.props;
     let note = this.keyboardToNotes[e.code];
-
     if (typeof note !== 'undefined') {
       note += octave * 12;
       noteOff(note);
@@ -90,6 +102,10 @@ class VirtualKeyboard extends Component {
     } else if (e.code === 'PageDown') {
       this.onOctaveChange(-1);
     }
+    keysDown[e.code] = false;
+    this.setState({
+      keysDown,
+    });
   }
 
   setupKeyboard() {
@@ -140,7 +156,7 @@ class VirtualKeyboard extends Component {
                     key={number}
                     onMouseDown={e => this.onMouseDown(number, e)}
                     onMouseUp={e => this.onMouseUp(number, e)}
-                    onMouseOut={e => this.onMouseUp(number, e)}
+                    onMouseOut={e => this.onMouseOut(number, e)}
                     onBlur={e => this.onMouseUp(number, e)}
                     onTouchStart={e => this.onMouseDown(number, e)}
                     onTouchEnd={e => this.onMouseUp(number, e)}

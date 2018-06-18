@@ -1,27 +1,52 @@
 import { Component } from 'react';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
+import { DFT } from 'dsp';
+import StereoPannerNode from 'stereo-panner-node';
 import { NOTE_ON, NOTE_OFF, CONTROL_CHANGE } from '../../actions/index';
 
+StereoPannerNode.polyfill();
 
-// TODO: use setValueAtTime(value, now) instead of .value
+const getPWMWave = (pulseWidth = 0.5) => {
+  const numSamples = 512;
+  const pulseLen = Math.round(numSamples * pulseWidth);
+  const samples = [];
+  for (let i = 0; i < numSamples; i += 1) {
+    const sample = i < pulseLen ? 1.0 : 0;
+    samples.push(sample);
+  }
+  const dft = new DFT(numSamples);
+  dft.forward(samples);
+  const { real, imag } = dft;
+  return {
+    real: new Float32Array(real),
+    imag: new Float32Array(imag),
+  };
+};
 
 const getPitch = (note) => {
-  const G0 = 24.5; // G0 = note number 0  = 24.5Hz
+  const G0 = 24.5; // G-nought = MIDI note number 0  = 24.5Hz
   return G0 * (2.0 ** ((1.0 * Math.max(0, Math.min(note, 88))) / 12));
 };
 
 class WebAudioSynth extends Component {
+  static propTypes = {
+    clearEventQueue: PropTypes.func.isRequired,
+    synthEvents: ImmutablePropTypes.list.isRequired,
+    controlValues: ImmutablePropTypes.map.isRequired,
+  };
   componentWillMount() {
     this.audioContext = new (window.AudioContext ||
       window.webkitAudioContext)();
     this.createSynth();
     this.setupControlHandlers();
+    this.notesOn = 0;
   }
 
   componentWillReceiveProps(props) {
     const { synthEvents } = props;
-    if (synthEvents.length) {
-      synthEvents.forEach(event => this.processEvent(event));
+    if (synthEvents.size) {
+      synthEvents.toJS().forEach(event => this.processEvent(event));
     }
     props.clearEventQueue();
   }
@@ -31,47 +56,76 @@ class WebAudioSynth extends Component {
     this.audioContext.close();
   }
 
+  setupOscType(osc, type, pulseWidth) {
+    if (type === 'custom') {
+      const { real, imag } = getPWMWave(pulseWidth);
+      const pwmWave = this.audioContext.createPeriodicWave(real, imag);
+      osc.setPeriodicWave(pwmWave);
+    } else {
+      osc.type = type; // eslint-disable-line no-param-reassign
+    }
+  }
+
   setupControlHandlers() {
     /* eslint-disable no-return-assign */
     this.controlHandlers = {
-      'oscillator-1-shape': type => this.osc1.type = type,
-      'oscillator-1-detune': value => this.osc1.detune.value = value,
-      'oscillator-2-shape': type => this.osc2.type = type,
-      'oscillator-2-detune': value => this.osc2.detune.value = value,
+      'oscillator-1-shape': type =>
+        this.setupOscType(this.osc1, type, this.props.controlValues.getIn(['oscillator-1', 'pulseWidth'])),
+      'oscillator-1-pulseWidth': value =>
+        this.setupOscType(this.osc1, this.props.controlValues.getIn(['oscillator-1', 'shape']), value),
+      'oscillator-1-detune': value => this.osc1.detune.setValueAtTime(value, this.audioContext.currentTime),
+      'oscillator-2-shape': type =>
+        this.setupOscType(this.osc2, type, this.props.controlValues.getIn(['oscillator-2', 'pulseWidth'])),
+      'oscillator-2-pulseWidth': value =>
+        this.setupOscType(this.osc2, this.props.controlValues.getIn(['oscillator-2', 'shape']), value),
+      'oscillator-2-detune': value => this.osc2.detune.setValueAtTime(value, this.audioContext.currentTime),
       'modulation-type': type => this.setupModType(type),
       'filter-type': (type) => { this.filter1.type = type; this.filter2.type = type; },
-      'filter-cutoff': (cutoff) => { this.filter1.frequency.value = cutoff; this.filter2.frequency.value = cutoff; },
-      'filter-resonance': (resonance) => { this.filter1.Q.value = resonance; this.filter2.Q.value = resonance; },
-      'volume-level': level => this.volume.gain.value = level,
-      'volume-pan': pan => this.panner.pan.value = pan,
+      'filter-cutoff': (cutoff) => {
+        this.filter1.frequency.setValueAtTime(cutoff, this.audioContext.currentTime);
+        this.filter2.frequency.setValueAtTime(cutoff, this.audioContext.currentTime);
+      },
+      'filter-resonance': (resonance) => {
+        this.filter1.Q.setValueAtTime(resonance, this.audioContext.currentTime);
+        this.filter2.Q.setValueAtTime(resonance, this.audioContext.currentTime);
+      },
+      'volume-level': level => this.volume.gain.setValueAtTime(level / 100, this.audioContext.currentTime),
+      'volume-pan': pan => this.panner.pan.setValueAtTime(pan / 100, this.audioContext.currentTime),
     };
     /* eslint-enable no-return-assign */
   }
 
   setupModType(modType = 'ring') {
     if (modType === 'ring') {
+      try {
+        this.osc1.disconnect(this.multiplier);
+      } catch (e) {} // eslint-disable-line no-empty
       this.osc1.connect(this.multiplier.gain);
     } else {
-      this.multiplier.gain.value = 1.0;
+      try {
+        this.osc1.disconnect(this.multiplier.gain);
+      } catch (e) {} // eslint-disable-line no-empty
       this.osc1.connect(this.multiplier);
+      this.multiplier.gain.setValueAtTime(1.0, this.audioContext.currentTime);
     }
   }
 
   createSynth() {
     const {
-      controlValues: {
-        'oscillator-1': osc1,
-        'oscillator-2': osc2,
-        modulation: {
-          type: modType,
-        },
-        filter,
-        volume: {
-          level,
-          pan,
-        },
-      },
+      controlValues,
     } = this.props;
+    const {
+      'oscillator-1': osc1,
+      'oscillator-2': osc2,
+      modulation: {
+        type: modType,
+      },
+      filter,
+      volume: {
+        level,
+        pan,
+      },
+    } = controlValues.toJS();
     const ctx = this.audioContext;
 
     this.osc1 = this.createOscillator(osc1);
@@ -87,9 +141,9 @@ class WebAudioSynth extends Component {
     this.vca.gain.value = 0;
 
     this.volume = ctx.createGain();
-    this.volume.gain.value = level;
+    this.volume.gain.setValueAtTime(level / 100, this.audioContext.currentTime);
     this.panner = ctx.createStereoPanner();
-    this.panner.pan.value = pan;
+    this.panner.pan.setValueAtTime(pan / 100, this.audioContext.currentTime);
 
     // Connect the Nodes together.
     this.setupModType(modType);
@@ -97,15 +151,17 @@ class WebAudioSynth extends Component {
     this.multiplier.connect(this.filter1);
     this.filter1.connect(this.filter2);
     this.filter2.connect(this.vca);
-    // TODO: consider combining these 2.
     this.vca.connect(this.volume);
     this.volume.connect(this.panner);
     this.panner.connect(ctx.destination);
   }
 
-  createOscillator({ shape = 'sawtooth', detune = 0.0, frequency = 440 }) {
+  createOscillator(config) {
+    const {
+      shape = 'sawtooth', detune = 0.0, frequency = 440, pulseWidth = 0.5,
+    } = config;
     const osc = this.audioContext.createOscillator();
-    osc.type = shape;
+    this.setupOscType(osc, shape, pulseWidth);
     osc.detune.setValueAtTime(detune, this.audioContext.currentTime);
     osc.frequency.setValueAtTime(frequency, this.audioContext.currentTime);
     osc.start();
@@ -115,8 +171,8 @@ class WebAudioSynth extends Component {
   createFilter({ type = 'lowpass', cutoff = 10000, resonance = 1.0 }) {
     const filter = this.audioContext.createBiquadFilter();
     filter.type = type;
-    filter.frequency.value = cutoff;
-    filter.Q.value = resonance;
+    filter.frequency.setValueAtTime(cutoff, this.audioContext.currentTime);
+    filter.Q.setValueAtTime(resonance, this.audioContext.currentTime);
     return filter;
   }
 
@@ -130,15 +186,16 @@ class WebAudioSynth extends Component {
 
   processEvent(event) {
     const {
-      controlValues: {
-        envelope: {
-          attack,
-          decay,
-          sustain,
-          release,
-        },
-      },
+      controlValues,
     } = this.props;
+    const {
+      envelope: {
+        attack,
+        decay,
+        sustain,
+        release,
+      },
+    } = controlValues.toJS();
     const now = this.audioContext.currentTime;
 
     switch (event.type) {
@@ -146,7 +203,7 @@ class WebAudioSynth extends Component {
         const frequency = getPitch(event.noteNum);
         this.osc1.frequency.setValueAtTime(frequency, this.audioContext.currentTime);
         this.osc2.frequency.setValueAtTime(frequency, this.audioContext.currentTime);
-        // fire up the EG.
+        // fire up the EG (always retriggers!)
         const { gain } = this.vca;
         gain.cancelScheduledValues(now);
         gain.setValueAtTime(0, now);
@@ -154,11 +211,17 @@ class WebAudioSynth extends Component {
         // (attack: 0-20s, decay & release 1ms - 60s(?)
         gain.linearRampToValueAtTime(1.0, now + (attack / 100));
         gain.linearRampToValueAtTime((sustain / 100), now + (attack / 100) + (decay / 100));
+        this.notesOn += 1;
         break;
       }
       case NOTE_OFF: {
-        const { gain } = this.vca;
-        gain.linearRampToValueAtTime(0, now + (release / 100));
+        // TODO? won't return to playing a note that's held down, check on other synths?
+        this.notesOn -= 1;
+        if (this.notesOn <= 0) {
+          const { gain } = this.vca;
+          gain.linearRampToValueAtTime(0, now + (release / 100));
+          this.notesOn = 0;
+        }
         break;
       }
       case CONTROL_CHANGE: {
@@ -178,11 +241,5 @@ class WebAudioSynth extends Component {
     return null;
   }
 }
-
-WebAudioSynth.propTypes = {
-  clearEventQueue: PropTypes.func.isRequired,
-  synthEvents: PropTypes.arrayOf(PropTypes.object).isRequired, // eslint-disable-line react/no-typos
-  controlValues: PropTypes.objectOf(PropTypes.any).isRequired, // eslint-disable-line react/no-typos
-};
 
 export default WebAudioSynth;

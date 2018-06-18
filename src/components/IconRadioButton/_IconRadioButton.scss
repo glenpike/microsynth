@@ -1,0 +1,39 @@
+.IconRadioButton {
+    width: 40px;
+    height: 40px;
+    float: left;
+    margin-right: $baseFontSize / 4;
+    &__radio {
+        opacity: 0;
+        width: 0;
+        height: 0;
+        display: none; // Firefox
+    }
+    &__label, &__label--checked {
+        @include primaryButton;
+        width: 100%;
+        height: 100%;
+	    display: inline-block;
+        padding: $baseFontSize / 4;
+        border-radius: $baseFontSize / 4;
+        &--checked {
+            @include primaryButtonDown;
+        }
+    }
+    &__label:hover {
+        @include primaryButtonHover;
+    }
+    .Icon {
+        display: inline-block;
+        width: 28px;
+        height: 28px;
+        fill: none;
+        stroke: $mediumTextColour;
+        stroke-width: 100px;
+    }
+
+    &__label--checked .Icon {
+        stroke: $primaryHue;
+    }
+
+}

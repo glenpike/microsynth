@@ -1,0 +1,48 @@
+.RotaryKnob,
+.RotaryKnob--disabled, {
+    &__Track {
+        fill: $primaryHue;
+    }
+    &__Value {
+        stroke: $indicatorColour;
+        stroke-width: 20;
+        fill: none;
+    }
+    &__Outline {
+        stroke: $primaryHue;
+        stroke-width: 3;
+        fill: none;
+    }
+    &__Outline--active {
+        stroke: $indicatorColour;
+        stroke-width: 3;
+        fill: none;
+    }
+    &__Label,
+    &__Debug {
+        @include preventSelection;
+        font-size: $baseFontSize / 2;
+        line-height: 1.2em;
+        color: $indicatorColour;
+        text-align: center;
+        padding: 0;
+        margin-top: -$baseFontSize / 4;
+        margin-bottom: 0;
+    }
+}
+
+.RotaryKnob--disabled {
+    opacity: 0.5;
+    .RotaryKnob__Track {
+        fill: $lightTextColour;
+    }
+    .RotaryKnob__Value {
+        stroke: $mediumTextColour;
+    }
+    .RotaryKnob__Outline {
+        stroke: $lightTextColour;
+    }
+    .RotaryKnob__Label {
+        color: $lightTextColour;
+    }
+}

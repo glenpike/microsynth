@@ -1,18 +1,21 @@
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { noteOn, noteOff, selectMidiInputDevice, midiControlMessage, midiInputDevicesUpdate } from '../actions';
+import { noteOn, noteOff, controlChange, listMidiDevices, selectMidiInputDevice/* , midiControlMessage */ } from '../actions';
 import MidiInput from '../components/MidiInput/MidiInput';
 
 const mapStateToProps = state => ({
-  inputs: state.midiControls.get('inputs').toJS(),
+  inputs: state.midiControls.get('inputs'),
+  selectedInputId: state.midiControls.get('selectedInputId'),
   selectedInput: state.midiControls.get('selectedInput'),
+  midiMap: state.midiControls.get('midiMap'),
 });
 
-const mapDispatchToProps = dispatch => ({
-  noteOn: noteNum => dispatch(noteOn(noteNum)),
-  noteOff: noteNum => dispatch(noteOff(noteNum)),
-  midiControlMessage: (control, value) => dispatch(midiControlMessage(control, value)),
-  selectMidiInputDevice: id => dispatch(selectMidiInputDevice(id)),
-  midiInputDevicesUpdate: inputs => dispatch(midiInputDevicesUpdate(inputs)),
-});
+const mapDispatchToProps = dispatch => bindActionCreators({
+  noteOn,
+  noteOff,
+  listMidiDevices,
+  selectMidiInputDevice,
+  controlChange,
+}, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(MidiInput);

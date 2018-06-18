@@ -24,12 +24,22 @@ $displayColour: #7fb514;
   border: 1px solid $primaryHue;
 }
 
+@mixin preventSelection () {
+  -webkit-touch-callout:none;
+  -webkit-user-select:none;
+  -khtml-user-select:none;
+  -moz-user-select:none;
+  -ms-user-select:none;
+  user-select:none;
+  -webkit-tap-highlight-color:rgba(0,0,0,0);
+}
+
 @mixin primaryButton () {
+  @include preventSelection;
   margin: 0;
   padding: 0 $baseFontSize / 4;
   color: $darkTextColour;
-  // border: 1px solid $altBackgroundColour;
-  box-shadow: 0 0 1px 1px rgba(81, 220, 230, 0.5);
+  // box-shadow: 0 0 1px 1px rgba(81, 220, 230, 0.5);
   background-color: $primaryHue;
 }
 
@@ -39,7 +49,7 @@ $displayColour: #7fb514;
 @mixin primaryButtonDown () {
   color: $lightTextColour;
   background-color: $indicatorColour;
-  box-shadow: 0 0 1px 1px rgba(240, 81, 107, 0.5);
+  // box-shadow: 0 0 1px 1px rgba(240, 81, 107, 0.5);
 }
 
 @mixin backgroundGradient() {
@@ -96,6 +106,8 @@ li {
 @import 'components/OscillatorControls/OscillatorControls';
 @import 'components/RadioButton/RadioButton';
 @import 'components/RangeControl/RangeControl';
+@import 'components/RotaryKnob/RotaryKnob';
+@import 'components/IconRadioButton/IconRadioButton';
 
 .MidiInput {
   &__Label {

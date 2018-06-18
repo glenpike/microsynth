@@ -1,36 +1,68 @@
 import React, { Component } from 'react';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
-import { listMidiDevices, selectMidiDevice } from '../../utils/midi-input';
+import { selectMidiDevice, unselectMidiDevice } from '../../utils/midi-input';
 
 
 class MidiInput extends Component {
+  static propTypes = {
+    inputs: ImmutablePropTypes.list.isRequired,
+    selectedInputId: PropTypes.any, // eslint-disable-line
+    selectedInput: PropTypes.any, // eslint-disable-line
+    noteOn: PropTypes.func.isRequired,
+    noteOff: PropTypes.func.isRequired,
+    controlChange: PropTypes.func.isRequired,
+    midiMap: ImmutablePropTypes.map.isRequired,
+    selectMidiInputDevice: PropTypes.func.isRequired,
+    listMidiDevices: PropTypes.func.isRequired,
+  };
+
+  static defaultPropTypes = {
+    selectedInput: null,
+  };
+
+
   componentWillMount() {
-    const { midiInputDevicesUpdate } = this.props;
-    this.selectedInput = null;
-    listMidiDevices().then((devices) => {
-      midiInputDevicesUpdate(devices.inputs);
-    });
+    const { listMidiDevices } = this.props;
+    this.selectedInput = null; // Change to state?
+    listMidiDevices();
   }
 
-  componentWillReceiveProps(props) {
+  componentWillUpdate(nextProps) {
     // if the selectedInput changes...
     const {
       selectedInput,
       noteOn, noteOff,
-      midiControlMessage: controlChange,
-    } = props;
-    if (selectedInput && selectedInput !== this.selectedInput) {
+    } = this.props;
+    const { selectedInput: newSelectedInput } = nextProps;
+    if (newSelectedInput && newSelectedInput !== selectedInput) {
       const handler = {
         noteOff,
         noteOn,
-        controlChange,
+        controlChange: msg => this.onMidiControlChange(msg),
       };
-      selectMidiDevice(selectedInput, handler);
+      selectMidiDevice(newSelectedInput, handler);
     }
   }
 
-  componentWillUnmount() {
 
+  componentWillUnmount() {
+    const { selectedInput } = this.props;
+    unselectMidiDevice(selectedInput);
+  }
+
+  onMidiControlChange(msg) {
+    const { controller, value } = msg;
+    const {
+      controlChange,
+      midiMap,
+    } = this.props;
+    const controlledValue = midiMap.get(`${controller}`);
+    if (controlledValue && controlledValue.toJS) {
+      const { groupName, controlType, map } = controlledValue.toJS();
+      const mappedValue = map ? map(value) : value;
+      controlChange(groupName, controlType, mappedValue);
+    }
   }
 
   onMidiDeviceSelect(event) {
@@ -38,18 +70,16 @@ class MidiInput extends Component {
     selectMidiInputDevice(event.target.value);
   }
 
-  // processEvent(event) {
-  // }
-
   render() {
     // Add a dropdown to show the chosen device,,,
-    const { inputs, selectedInput } = this.props;
-    const options = inputs.map(({ id, name }) => (<option key={id} value={id}>{name}</option>));
+    const { inputs, selectedInputId } = this.props;
+    const options = inputs.map(({ id, name }) =>
+      (<option key={id} value={id}>{name}</option>)).toJS();
     if (options.length) {
       return (
         <div>
-          <label className="MidiInput__Label"  htmlFor="midiSelect">MIDI Input:
-            <select className="MidiInput__Select" id="midiSelect" value={selectedInput} onChange={e => this.onMidiDeviceSelect(e)} >
+          <label className="MidiInput__Label" htmlFor="midiSelect">MIDI Input:
+            <select className="MidiInput__Select" id="midiSelect" value={selectedInputId || ''} onChange={e => this.onMidiDeviceSelect(e)} >
               <option value="none">Select</option>
               {options}
             </select>
@@ -60,19 +90,5 @@ class MidiInput extends Component {
     return null;
   }
 }
-
-MidiInput.defaultPropTypes = {
-  selectedInput: null,
-};
-
-MidiInput.propTypes = {
-  inputs: PropTypes.arrayOf(PropTypes.object).isRequired,
-  selectedInput: PropTypes.any, // eslint-disable-line
-  noteOn: PropTypes.func.isRequired,
-  noteOff: PropTypes.func.isRequired,
-  midiControlMessage: PropTypes.func.isRequired,
-  selectMidiInputDevice: PropTypes.func.isRequired,
-  midiInputDevicesUpdate: PropTypes.func.isRequired,
-};
 
 export default MidiInput;

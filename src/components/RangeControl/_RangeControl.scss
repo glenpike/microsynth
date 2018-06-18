@@ -1,5 +1,16 @@
 .RangeControl {
-    &__Knob {
+    &__Knob__background {
+        // fill: $mediumTextColour;
+        // stroke: $mediumTextColour;
+    }
+    &__Knob__track-background {
+        stroke: $primaryHue;
+    }
+    &__Knob__track {
+        stroke: $indicatorColour;
+    }
+    &__Knob__cursor {
+        stroke: $indicatorColour;
     }
     &__label {
         font-size: $baseFontSize / 2;

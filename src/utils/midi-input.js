@@ -1,37 +1,9 @@
 /*
-    Very simplistic module for listing, getting MIDI devices.
-    Will also allow handlerping of an input to
+    MIDI message handler - simple.
+    TODO: move this function to Redux Middleware maybe?
     See https://webaudio.github.io/web-midi-api
     & https://developer.mozilla.org/en-US/docs/Web/API/MIDIAccess
 */
-
-// Store our MIDI inputs / outputs here.
-// We don't listen for disconnect, which could happen!
-let inputs;
-let outputs;
-
-// Asks the browser for a list of devices, stores the
-// results and returns iterators to loop through these.
-const listMidiDevices = () => {
-  // Get lists of available MIDI controllers
-  if (!navigator.requestMIDIAccess) {
-    return Promise.resolve({inputs: [], outputs: []});
-  }
-
-  return navigator.requestMIDIAccess().then((access) => {
-    /* eslint-disable prefer-destructuring */
-    inputs = access.inputs;
-    outputs = access.outputs;
-    /* eslint-enable prefer-destructuring */
-    return {
-      // Returning generators - we can only iterate them once!
-      // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...of
-      inputs: inputs.values(),
-      outputs: outputs.values(),
-    };
-  });
-
-};
 
 const onMIDIMessage = (event, handler) => {
   const byte0 = event.data[0] & 0xf0; // eslint-disable-line no-bitwise
@@ -54,9 +26,9 @@ const onMIDIMessage = (event, handler) => {
     }
     case 0xb0: { // continuous controller.
       const byte1 = event.data[1] & 0xff; // eslint-disable-line no-bitwise
-      console.log(`byte1 ${byte1} (${byte1.toString(16)})`); // eslint-disable-line no-console
+      // console.log(`byte1 ${byte1} (${byte1.toString(16)})`); // eslint-disable-line no-console
       if (handler.controlChange) {
-        handler.controlChange(byte1, event.data[2]);
+        handler.controlChange({ controller: byte1, value: event.data[2] });
       }
       return;
     }
@@ -70,33 +42,19 @@ const onMIDIMessage = (event, handler) => {
   }
 };
 
-// Get the input & output for a specific device ID
-const selectMidiDevice = (id, handler) => {
-  if (!inputs && !outputs) {
-    console.log('no inputs or outputs '); // eslint-disable-line no-console
-    return null;
+const unselectMidiDevice = (input) => {
+  if (input) {
+    // eslint-disable-next-line no-param-reassign
+    input.onmidimessage = null;
   }
-  const device = {};
-  /* eslint-disable no-restricted-syntax */
-  for (const input of inputs.values()) {
-    if (id && input.id === id) {
-      // console.log('found input ', input);
-      device.input = input;
-      device.input.onmidimessage = e => onMIDIMessage(e, handler);
-    }
-  }
-  for (const output of outputs.values()) {
-    // console.log('output ', output);
-    if (id && output.id === id) {
-      // console.log('found output ', output);
-      device.output = output;
-    }
-  }
-  /* eslint-enable no-restricted-syntax */
-  return device;
+};
+
+const selectMidiDevice = (input, handler) => {
+  // eslint-disable-next-line no-param-reassign
+  input.onmidimessage = e => onMIDIMessage(e, handler);
 };
 
 module.exports = {
-  listMidiDevices,
   selectMidiDevice,
+  unselectMidiDevice,
 };

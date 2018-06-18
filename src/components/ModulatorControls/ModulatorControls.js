@@ -1,9 +1,17 @@
 import React, { Component } from 'react';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
 import ControlGroup from '../ControlGroup/ControlGroup';
 import RadioButton from '../RadioButton/RadioButton';
 
 class ModulationControls extends Component {
+  static propTypes = {
+    label: PropTypes.string.isRequired,
+    controlName: PropTypes.string.isRequired,
+    controlChange: PropTypes.func.isRequired,
+    controlValues: ImmutablePropTypes.map.isRequired,
+  };
+
   componentWillMount() {
   }
   onTypeChange(e) {
@@ -12,7 +20,7 @@ class ModulationControls extends Component {
   }
   render() {
     const { controlValues, label, controlName } = this.props;
-    const { type } = controlValues[controlName];
+    const type = controlValues.getIn([controlName, 'type']);
     return (
       <ControlGroup label={label}>
         <RadioButton
@@ -35,12 +43,5 @@ class ModulationControls extends Component {
     );
   }
 }
-
-ModulationControls.propTypes = {
-  label: PropTypes.string.isRequired,
-  controlName: PropTypes.string.isRequired,
-  controlChange: PropTypes.func.isRequired,
-  controlValues: PropTypes.objectOf(PropTypes.any).isRequired,
-};
 
 export default ModulationControls;

@@ -2,8 +2,10 @@ import { Component } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
 import { DFT } from 'dsp';
+import StereoPannerNode from 'stereo-panner-node';
 import { NOTE_ON, NOTE_OFF, CONTROL_CHANGE } from '../../actions/index';
 
+StereoPannerNode.polyfill();
 
 const getPWMWave = (pulseWidth = 0.5) => {
   const numSamples = 512;
@@ -17,13 +19,13 @@ const getPWMWave = (pulseWidth = 0.5) => {
   dft.forward(samples);
   const { real, imag } = dft;
   return {
-    real: Float32Array.from(real),
-    imag: Float32Array.from(imag),
+    real: new Float32Array(real),
+    imag: new Float32Array(imag),
   };
 };
 
 const getPitch = (note) => {
-  const G0 = 24.5; // G0 = note number 0  = 24.5Hz
+  const G0 = 24.5; // G-nought = MIDI note number 0  = 24.5Hz
   return G0 * (2.0 ** ((1.0 * Math.max(0, Math.min(note, 88))) / 12));
 };
 

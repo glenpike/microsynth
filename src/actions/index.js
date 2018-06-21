@@ -12,6 +12,25 @@ export const MIDI_DEVICES_LIST_ERROR = 'MIDI_DEVICES_LIST_ERROR';
 // export const MIDI_DEVICE_RECONNECT = 'MIDI_DEVICE_RECONNECT';
 export const MIDI_INPUT_DEVICE_SELECT = 'MIDI_INPUT_DEVICE_SELECT';
 
+export const KEYBOARD_OCTAVE_CHANGE = 'KEYBOARD_OCTAVE_CHANGE';
+export const ARPEGGIATOR_TOGGLE = 'ARPEGGIATOR_TOGGLE';
+export const ARPEGGIO_SELECT = 'ARPEGGIO_SELECT';
+
+export const keyboardOctaveChange = octave => ({
+  type: KEYBOARD_OCTAVE_CHANGE,
+  octave,
+});
+
+export const arpeggiatorToggle = isActive => ({
+  type: ARPEGGIATOR_TOGGLE,
+  isActive,
+});
+
+export const arpeggioSelect = currentPattern => ({
+  type: ARPEGGIO_SELECT,
+  currentPattern,
+});
+
 export const resizeApp = contentRect => ({
   type: RESIZE_APP,
   contentRect,

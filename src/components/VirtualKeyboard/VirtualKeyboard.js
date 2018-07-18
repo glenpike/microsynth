@@ -35,14 +35,29 @@ class VirtualKeyboard extends Component {
     keyboardOctaveChange: PropTypes.func.isRequired,
     arpeggiator: ImmutablePropTypes.map.isRequired,
     arpeggiatorToggle: PropTypes.func.isRequired,
-    // arpeggioSelect: PropTypes.func.isRequired,
+    arpeggioSelect: PropTypes.func.isRequired,
+    arpeggioBPM: PropTypes.func.isRequired,
   };
   constructor(props) {
     super(props);
-    this.state = { keysDown: {} };
+    this.state = { keysDown: {}, currentNote: null };
   }
   componentWillMount() {
     this.setupKeyboard();
+  }
+
+  componentDidUpdate(prevProps) {
+    const { arpeggiator } = this.props;
+    const { arpeggiator: prevArpeggiator } = prevProps;
+    if (arpeggiator.get('currentPattern') !== prevArpeggiator.get('currentPattern') ||
+      arpeggiator.get('bpm') !== prevArpeggiator.get('bpm')) {
+      // stop & restart arpeggiator with current noteNum
+      const { currentNote } = this.state;
+      if (currentNote) {
+        this.stopArpeggiator();
+        this.startArpeggiator(currentNote);
+      }
+    }
   }
 
   componentWillUnmount() {
@@ -95,6 +110,7 @@ class VirtualKeyboard extends Component {
     }
     this.setState({
       keysDown,
+      currentNote: note,
     });
   }
 
@@ -116,12 +132,23 @@ class VirtualKeyboard extends Component {
     delete keysDown[e.code];
     this.setState({
       keysDown,
+      currentNote: null,
     });
   }
 
   onArpeggiatorToggle(e) {
     const { arpeggiatorToggle } = this.props;
     arpeggiatorToggle(+e.target.value === 1);
+  }
+
+  onArpeggioSelect(event) {
+    const { arpeggioSelect } = this.props;
+    arpeggioSelect(event.target.value);
+  }
+
+  onArpeggioBPM(event) {
+    const { arpeggioBPM } = this.props;
+    arpeggioBPM(event.target.value || 10);
   }
 
   setupKeyboard() {
@@ -152,18 +179,21 @@ class VirtualKeyboard extends Component {
       defaultPatterns,
     } = arpeggiator.toJS();
     const patternNotes = defaultPatterns[currentPattern];
-    const time = 60000 / bpm;
+    const time = 60000 / (bpm * 4);
     let noteIdx = 1;
     let { arpeggiatorInterval, lastNote } = this.state;
     const triggerNextNote = () => {
       const patternNote = patternNotes[noteIdx];
-      if (lastNote && patternNote !== '-') {
+      if (lastNote && patternNote !== 'skip') {
         noteOff(lastNote);
       }
       if (typeof patternNote === 'number') {
         const nextNote = noteNum + (patternNote - 1) + (octave * 12);
         noteOn(nextNote);
         lastNote = nextNote;
+        this.setState({
+          lastNote,
+        });
       }
       noteIdx += 1;
       if (noteIdx === patternNotes.length) {
@@ -183,9 +213,13 @@ class VirtualKeyboard extends Component {
   }
 
   stopArpeggiator() {
-    const { arpeggiatorInterval } = this.state;
+    const { noteOff } = this.props;
+    const { arpeggiatorInterval, lastNote } = this.state;
     if (arpeggiatorInterval) {
       clearInterval(arpeggiatorInterval);
+    }
+    if (lastNote) {
+      noteOff(lastNote);
     }
     this.setState({
       lastNote: null,
@@ -195,8 +229,18 @@ class VirtualKeyboard extends Component {
 
   render() {
     const PADDING = 24; // need to get this from the CSS?
-    const { notesOn, contentRect, octave, arpeggiator } = this.props;
-    const arpeggiatorActive = arpeggiator.get('isActive');
+    const {
+      notesOn, contentRect, octave,
+      arpeggiator,
+    } = this.props;
+    const {
+      isActive: arpeggiatorActive,
+      defaultPatterns,
+      currentPattern,
+      bpm,
+    } = arpeggiator.toJS();
+    const patternOptions = defaultPatterns.map((pattern, index) =>
+      (<option key={pattern} value={index}>{pattern.join(' ')}</option>));
     const width = contentRect.getIn(['client', 'width'], 100) - PADDING;
     // const { octave } = this.state;
     const noteOnValues = notesOn.map(noteOn => noteOn.noteNum).toJS();
@@ -205,24 +249,35 @@ class VirtualKeyboard extends Component {
     return (
       <ControlGroup extraClasses="ControlGroup--gradient">
         <div className="VirtualKeyboard" style={{ width: `${width}px` }}>
-          <div className="VirtualKeyboard__Controls">
+          <div className="VirtualKeyboard__Controls clear">
             <button className="VirtualKeyboard__Button" onClick={() => this.onOctaveChange(-1)}>octave -</button>
             <button className="VirtualKeyboard__Button" onClick={() => this.onOctaveChange(1)}>octave +</button>
             <span className="VirtualKeyboard__Octave">{displayOctave}</span>
-            <RadioButton
-              id="ArpeggiatorOn"
-              label="On"
-              value={1}
-              isChecked={arpeggiatorActive}
-              onChange={e => this.onArpeggiatorToggle(e)}
-            />
-            <RadioButton
-              id="ArpeggiatorOff"
-              label="Off"
-              value={0}
-              isChecked={!arpeggiatorActive}
-              onChange={e => this.onArpeggiatorToggle(e)}
-            />
+            <div className="VirtualKeyboard__Arpeggiator">
+              <span className="VirtualKeyboard__Arpeggiator_text">Arpeggiator</span>
+              <label className="VirtualKeyboard__Arpeggiator_Label" htmlFor="patternSelect">Pattern:
+                <select className="VirtualKeyboard__Arpeggiator_Pattern styled-select" id="patternSelect" value={currentPattern} onChange={e => this.onArpeggioSelect(e)} >
+                  {patternOptions}
+                </select>
+              </label>
+              <label className="VirtualKeyboard__Arpeggiator_Label" htmlFor="bpmSelect">BPM:
+                <input type="number" className="VirtualKeyboard__Arpeggiator_Number styled-input" id="bpmSelect" value={bpm} min="10" max="240" onChange={e => this.onArpeggioBPM(e)}/>
+              </label>
+              <RadioButton
+                id="ArpeggiatorOn"
+                label="On"
+                value={1}
+                isChecked={arpeggiatorActive}
+                onChange={e => this.onArpeggiatorToggle(e)}
+              />
+              <RadioButton
+                id="ArpeggiatorOff"
+                label="Off"
+                value={0}
+                isChecked={!arpeggiatorActive}
+                onChange={e => this.onArpeggiatorToggle(e)}
+              />
+            </div>
           </div>
           <div className="VirtualKeyboard__KeysWrapper">
             <div className="VirtualKeyboard__Keys" style={{ left: `${-offset}px` }}>

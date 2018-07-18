@@ -3,6 +3,7 @@ import {
   KEYBOARD_OCTAVE_CHANGE,
   ARPEGGIATOR_TOGGLE,
   ARPEGGIO_SELECT,
+  ARPEGGIO_BPM,
 } from '../actions';
 
 export const initialState = Immutable.fromJS({
@@ -10,7 +11,7 @@ export const initialState = Immutable.fromJS({
   arpeggiator: {
     isActive: false,
     currentPattern: 0,
-    bpm: 140 * 4,
+    bpm: 140,
     defaultPatterns: [
       [0,4,7,'skip',4,7,0,7],
       [0,2,4,6,7,6,4,2],
@@ -38,6 +39,10 @@ const keyboardControls = (state = initialState, action) => {
     case ARPEGGIO_SELECT: {
       const { currentPattern } = action;
       return state.setIn(['arpeggiator', 'currentPattern'], currentPattern);
+    }
+    case ARPEGGIO_BPM: {
+      const { bpm } = action;
+      return state.setIn(['arpeggiator', 'bpm'], bpm);
     }
     default:
       return state;

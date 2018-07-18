@@ -15,6 +15,7 @@ export const MIDI_INPUT_DEVICE_SELECT = 'MIDI_INPUT_DEVICE_SELECT';
 export const KEYBOARD_OCTAVE_CHANGE = 'KEYBOARD_OCTAVE_CHANGE';
 export const ARPEGGIATOR_TOGGLE = 'ARPEGGIATOR_TOGGLE';
 export const ARPEGGIO_SELECT = 'ARPEGGIO_SELECT';
+export const ARPEGGIO_BPM = 'ARPEGGIO_BPM';
 
 export const keyboardOctaveChange = octave => ({
   type: KEYBOARD_OCTAVE_CHANGE,
@@ -29,6 +30,11 @@ export const arpeggiatorToggle = isActive => ({
 export const arpeggioSelect = currentPattern => ({
   type: ARPEGGIO_SELECT,
   currentPattern,
+});
+
+export const arpeggioBPM = bpm => ({
+  type: ARPEGGIO_BPM,
+  bpm,
 });
 
 export const resizeApp = contentRect => ({

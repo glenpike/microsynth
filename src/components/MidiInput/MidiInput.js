@@ -79,7 +79,7 @@ class MidiInput extends Component {
       return (
         <div>
           <label className="MidiInput__Label" htmlFor="midiSelect">MIDI Input:
-            <select className="MidiInput__Select" id="midiSelect" value={selectedInputId || ''} onChange={e => this.onMidiDeviceSelect(e)} >
+            <select className="MidiInput__Select styled-select" id="midiSelect" value={selectedInputId || ''} onChange={e => this.onMidiDeviceSelect(e)} >
               <option value="none">Select</option>
               {options}
             </select>

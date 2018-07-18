@@ -109,6 +109,12 @@ li {
 @import 'components/RotaryKnob/RotaryKnob';
 @import 'components/IconRadioButton/IconRadioButton';
 
+.styled-select,
+.styled-input {
+  background-color: #35e2e2;
+  border: 0;
+}
+
 .MidiInput {
   &__Label {
     color: $primaryHue;

@@ -7,10 +7,12 @@
     }
     &__Button {
         @include primaryButton;
+        padding: 3px 6px;
         border: 1px solid $primaryHueDarker;
         font-size: $baseFontSize * 0.65;
         font-weight: bold;
         margin-right: $baseFontSize / 4;
+        float: left;
     }
     &__Octave {
         @include preventSelection;
@@ -18,6 +20,39 @@
         padding: 0 $baseLineHeight * 0.5;
         color: $primaryHue;
         border: 1px solid $primaryHueDarker;
+        margin-right: $baseFontSize / 4;
+        float: left;
+    }
+    &__Arpeggiator {
+        float: right;
+    }
+    &__Arpeggiator_text {
+        float: left;
+        font-size: $baseFontSize * 0.65;
+        color: $primaryHue;
+    }
+    &__Arpeggiator_Label {
+        float: left;
+        font-size: $baseFontSize * 0.65;
+        color: $primaryHue;
+        margin-left: $baseFontSize / 4;
+    }
+    &__Arpeggiator_Pattern,
+    &__Arpeggiator_Number {
+        margin-left: $baseFontSize / 4;
+        font-size: $baseFontSize *  0.65;
+        padding: 2px 6px 3px;
+    }
+    &__Arpeggiator_Number {
+        width: $baseFontSize * 3;
+        padding: 3px 6px 4px;
+    }
+    // Crappy override for RadioButton - fix!
+    &__Arpeggiator>div {
+        font-size: $baseFontSize * 0.65;
+        font-weight: bold;
+        margin-left: $baseFontSize / 4;
+        float: left;
     }
     &__KeysWrapper {
         width: 100%;

@@ -1,6 +1,6 @@
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { noteOn, noteOff, keyboardOctaveChange, arpeggiatorToggle, arpeggioSelect } from '../actions';
+import { noteOn, noteOff, keyboardOctaveChange, arpeggiatorToggle, arpeggioSelect, arpeggioBPM } from '../actions';
 import VirtualKeyboard from '../components/VirtualKeyboard/VirtualKeyboard';
 
 const mapStateToProps = state => ({
@@ -11,7 +11,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-  noteOn, noteOff, keyboardOctaveChange, arpeggiatorToggle, arpeggioSelect,
+  noteOn, noteOff, keyboardOctaveChange, arpeggiatorToggle, arpeggioSelect, arpeggioBPM,
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(VirtualKeyboard);

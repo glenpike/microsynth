@@ -23,7 +23,10 @@
   },
   "scripts": {
     "start-js": "react-scripts start",
-    "start": "npm-run-all -p watch-css start-js test",
+    "dev:start": "npm-run-all -p watch-css start-js test",
+    "start": "if-env NODE_ENV=production && npm run glitch:start || npm run dev:start",
+    "glitch:start": "static build --gzip",
+    "glitch:build": "react-scripts build && gzip -rk build && refresh",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",

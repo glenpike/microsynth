@@ -65,24 +65,37 @@ class VirtualKeyboard extends Component {
     document.removeEventListener('keyup');
   }
 
-  onMouseDown(number, event) {
-    const { noteOn } = this.props;
+  onMouseDown(note, event) {
+    const { noteOn, arpeggiator } = this.props;
     event.preventDefault();
-    noteOn(number);
+    if (arpeggiator.get('isActive')) {
+      this.startArpeggiator(note);
+    } else {
+      noteOn(note);
+    }
+    this.setState({
+      currentNote: note,
+    });
   }
 
-  onMouseUp(number, event) {
-    const { noteOff } = this.props;
+  onMouseUp(note, event) {
+    const { noteOff, arpeggiator } = this.props;
     event.preventDefault();
-    noteOff(number);
+    if (arpeggiator.get('isActive')) {
+      this.stopArpeggiator();
+    }
+    noteOff(note);
   }
 
-  onMouseOut(number, event) {
-    const { noteOff, notesOn } = this.props;
-    const noteOnValues = notesOn.map(noteOn => noteOn.noteNum).toJS();
+  onMouseOut(note, event) {
+    const { noteOff, arpeggiator } = this.props;
+    const { currentNote } = this.state;
     event.preventDefault();
-    if (noteOnValues.indexOf(number) !== -1) {
-      noteOff(number);
+    if (currentNote === note) {
+      if (arpeggiator.get('isActive')) {
+        this.stopArpeggiator();
+      }
+      noteOff(note);
     }
   }
 
@@ -97,19 +110,20 @@ class VirtualKeyboard extends Component {
     if (keysDown[e.code]) {
       return;
     }
-    keysDown[e.code] = true;
+    const newKeysDown = { ...keysDown };
+    newKeysDown[e.code] = true;
     const { noteOn, octave, arpeggiator } = this.props;
     let note = this.keyboardToNotes[e.code];
     if (typeof note !== 'undefined') {
+      note += octave * 12;
       if (arpeggiator.get('isActive')) {
         this.startArpeggiator(note);
       } else {
-        note += octave * 12;
         noteOn(note);
       }
     }
     this.setState({
-      keysDown,
+      keysDown: newKeysDown,
       currentNote: note,
     });
   }
@@ -119,19 +133,20 @@ class VirtualKeyboard extends Component {
     const { noteOff, octave, arpeggiator } = this.props;
     let note = this.keyboardToNotes[e.code];
     if (typeof note !== 'undefined') {
+      note += octave * 12;
       if (arpeggiator.get('isActive')) {
         this.stopArpeggiator();
       }
-      note += octave * 12;
       noteOff(note);
     } else if (e.code === 'PageUp') {
       this.onOctaveChange(1);
     } else if (e.code === 'PageDown') {
       this.onOctaveChange(-1);
     }
-    delete keysDown[e.code];
+    const newKeysDown = { ...keysDown };
+    delete newKeysDown[e.code];
     this.setState({
-      keysDown,
+      keysDown: newKeysDown,
       currentNote: null,
     });
   }
@@ -170,7 +185,7 @@ class VirtualKeyboard extends Component {
     const {
       noteOn,
       noteOff,
-      octave,
+      // octave,
       arpeggiator,
     } = this.props;
     const {
@@ -188,7 +203,7 @@ class VirtualKeyboard extends Component {
         noteOff(lastNote);
       }
       if (typeof patternNote === 'number') {
-        const nextNote = noteNum + (patternNote - 1) + (octave * 12);
+        const nextNote = noteNum + patternNote;
         noteOn(nextNote);
         lastNote = nextNote;
         this.setState({

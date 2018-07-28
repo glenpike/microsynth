@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
-import { DFT } from 'dsp';
+import { DFT } from 'dsp.js';
 import StereoPannerNode from 'stereo-panner-node';
 import { NOTE_ON, NOTE_OFF, CONTROL_CHANGE } from '../../actions/index';
 

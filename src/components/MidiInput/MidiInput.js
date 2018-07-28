@@ -5,6 +5,10 @@ import { selectMidiDevice, unselectMidiDevice } from '../../utils/midi-input';
 
 
 class MidiInput extends Component {
+  static defaultPropTypes = {
+    selectedInput: null,
+  };
+
   static propTypes = {
     inputs: ImmutablePropTypes.list.isRequired,
     selectedInputId: PropTypes.any, // eslint-disable-line
@@ -16,11 +20,6 @@ class MidiInput extends Component {
     selectMidiInputDevice: PropTypes.func.isRequired,
     listMidiDevices: PropTypes.func.isRequired,
   };
-
-  static defaultPropTypes = {
-    selectedInput: null,
-  };
-
 
   componentWillMount() {
     const { listMidiDevices } = this.props;

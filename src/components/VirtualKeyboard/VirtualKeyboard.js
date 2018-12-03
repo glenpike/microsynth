@@ -261,7 +261,7 @@ class VirtualKeyboard extends Component {
                 </select>
               </label>
               <label className="VirtualKeyboard__Arpeggiator_Label" htmlFor="bpmSelect">BPM:
-                <input type="number" className="VirtualKeyboard__Arpeggiator_Number styled-input" id="bpmSelect" value={bpm} min="10" max="240" onChange={e => this.onArpeggioBPM(e)}/>
+                <input type="number" className="VirtualKeyboard__Arpeggiator_Number styled-input" id="bpmSelect" value={bpm} min="10" max="240" onChange={e => this.onArpeggioBPM(e)} />
               </label>
               <RadioButton
                 id="ArpeggiatorOn"

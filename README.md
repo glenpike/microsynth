@@ -79,3 +79,6 @@ components.
   - [ ] Add an LFO
   - [ ] Polyphony (with Envelopes for each!)?
   - [ ] Drop in synth configurations, e.g. a JSON graph describing the modules and settings (modular heaven or hell?)
+
+  - Code
+   - [ ] Eslint is fixed at 5.6.0 although there is a newer release - CRA doesn't like the newer one.

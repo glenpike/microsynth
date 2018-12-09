@@ -1,3 +1,4 @@
+/* global jest */
 import * as midiActions from './midiInputActions';
 
 describe('midi actions', () => {
@@ -12,7 +13,6 @@ describe('midi actions', () => {
   });
 
   describe('listMidiDevices', () => {
-
     let originalNavigator;
     beforeEach(() => {
       originalNavigator = global.navigator;
@@ -30,11 +30,11 @@ describe('midi actions', () => {
           expect(dispatch.mock.calls[0][0])
             .to.deep.equal(expectedAction);
         });
-    }
-    
+    };
+
     it('listMidiDevices dispatches correct action if midi is not supported', () => {
       const expectedAction = {
-        type: midiActions.MIDI_NOT_SUPPORTED
+        type: midiActions.MIDI_NOT_SUPPORTED,
       };
 
       return testListDevices(expectedAction);
@@ -48,7 +48,7 @@ describe('midi actions', () => {
       };
 
       global.navigator.requestMIDIAccess = () =>
-        new Promise((resolve, reject) => { reject(error) });
+        new Promise((resolve, reject) => { reject(error); });
       return testListDevices(expectedAction);
     });
 
@@ -60,10 +60,9 @@ describe('midi actions', () => {
       };
 
       global.navigator.requestMIDIAccess = () =>
-        new Promise((resolve) => { resolve(deviceList) });
+        new Promise((resolve) => { resolve(deviceList); });
 
       return testListDevices(expectedAction);
-
     });
   });
 });

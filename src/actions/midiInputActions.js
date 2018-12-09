@@ -7,35 +7,34 @@ export const MIDI_INPUT_DEVICE_SELECT = 'MIDI_INPUT_DEVICE_SELECT';
 
 
 export const midiNotSuppported = () => ({
-    type: MIDI_NOT_SUPPORTED,
-  });
-  
-  export const midiDevicesListSuccess = deviceList => ({
-    type: MIDI_DEVICES_LIST_SUCCESS,
-    deviceList,
-  });
-  
-  export const midiDevicesListError = error => ({
-    type: MIDI_DEVICES_LIST_ERROR,
-    error,
-  });
-  
-  export const listMidiDevices = () => (dispatch) => {
-    if (!navigator.requestMIDIAccess) {
-      dispatch(midiNotSuppported());
-      return Promise.resolve();
-    }
-    return navigator.requestMIDIAccess()
-      .then((deviceList) => {
-        dispatch(midiDevicesListSuccess(deviceList));
-      })
-      .catch((error) => {
-        dispatch(midiDevicesListError(error));
-      });
-  };
-  
-  export const selectMidiInputDevice = id => ({
-    type: MIDI_INPUT_DEVICE_SELECT,
-    id,
-  });
-  
+  type: MIDI_NOT_SUPPORTED,
+});
+
+export const midiDevicesListSuccess = deviceList => ({
+  type: MIDI_DEVICES_LIST_SUCCESS,
+  deviceList,
+});
+
+export const midiDevicesListError = error => ({
+  type: MIDI_DEVICES_LIST_ERROR,
+  error,
+});
+
+export const listMidiDevices = () => (dispatch) => {
+  if (!navigator.requestMIDIAccess) {
+    dispatch(midiNotSuppported());
+    return Promise.resolve();
+  }
+  return navigator.requestMIDIAccess()
+    .then((deviceList) => {
+      dispatch(midiDevicesListSuccess(deviceList));
+    })
+    .catch((error) => {
+      dispatch(midiDevicesListError(error));
+    });
+};
+
+export const selectMidiInputDevice = id => ({
+  type: MIDI_INPUT_DEVICE_SELECT,
+  id,
+});

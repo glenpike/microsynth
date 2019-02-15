@@ -35,7 +35,9 @@ class WebAudioSynth extends Component {
     synthEvents: ImmutablePropTypes.list.isRequired,
     controlValues: ImmutablePropTypes.map.isRequired,
   };
+
   componentWillMount() {
+    this.audioContextResumed = false;
     this.audioContext = new (window.AudioContext ||
       window.webkitAudioContext)();
     this.createSynth();
@@ -200,6 +202,10 @@ class WebAudioSynth extends Component {
 
     switch (event.type) {
       case NOTE_ON: {
+        if (!this.audioContextResumed) {
+          this.audioContext.resume();
+          this.audioContextResumed = true;
+        }
         const frequency = getPitch(event.noteNum);
         this.osc1.frequency.setValueAtTime(frequency, this.audioContext.currentTime);
         this.osc2.frequency.setValueAtTime(frequency, this.audioContext.currentTime);

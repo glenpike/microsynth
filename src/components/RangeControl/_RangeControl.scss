@@ -1,3 +1,5 @@
+@use 'variables' as *;
+
 .RangeControl {
     &__Knob__background {
         // fill: $mediumTextColour;
@@ -13,9 +15,9 @@
         stroke: $indicatorColour;
     }
     &__label {
-        font-size: $baseFontSize / 2;
+        font-size: calc($baseFontSize / 2);
         color: $indicatorColour;
         text-align: center;
-        margin-top: $baseFontSize / 4;
+        margin-top: calc($baseFontSize / 4);
     }
 }

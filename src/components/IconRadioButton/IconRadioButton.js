@@ -10,8 +10,8 @@ const IconRadioButton = (props) => {
   const inputId = `${defaultClass}-${value}-${id}`;
   return (
     <div className={defaultClass}>
-      <input className={`${defaultClass}__radio`} type="radio" id={inputId} onChange={onChange} name="IconRadioButton" value={value} checked={isChecked} />
       <label className={`${defaultClass}__label${isChecked ? '--checked' : ''} ${defaultClass}__${value}`} htmlFor={inputId}>
+        <input className={`${defaultClass}__radio`} type="radio" id={inputId} onChange={onChange} name="IconRadioButton" value={value} checked={isChecked} />
         <Icon icon={icon} title={label} />
       </label>
     </div>

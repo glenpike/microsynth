@@ -6,6 +6,8 @@ import {
   CLEAR_EVENT_QUEUE,
 } from '../actions';
 
+// Is this UI state or data??
+// https://redux.js.org/basics/reducers/#designing-the-state-shape
 export const initialState = Immutable.fromJS({
   notesOn: [], // TODO: handle channels?
   controlValues: {

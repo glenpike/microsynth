@@ -8,8 +8,23 @@ Uses SCSS for styling as an additional to the React stuff: [Adding Sass or Scss 
 
 Also uses [Eslint](https://eslint.org/) along with the [Airbnb Style Guide](https://github.com/airbnb/javascript/tree/master/packages/eslint-config-airbnb)
 
+Deployed on Glitch - https://microsynth.glitch.me/
 
-# To Run
+# Remixing & Running on Glitch
+
+See the [create-react-app-demo](https://glitch.com/edit/#!/create-react-app-demo?path=README.md:1:0) project
+for more information.  Also see this [support post](https://support.glitch.com/t/create-react-app-support/1295/13)
+
+To create and serve a production version of your app:
+
+    Run npm run build using the Logs > Console
+    Set NODE_ENV=production in the .env file
+
+Then Glitch will serve the production build version of your app!
+
+If you need to develop again, just unset the NODE_ENV variable and wait a bit for the modules to be installed.
+
+# To Run locally
 
 Use `npm install` or `yarn` to setup the packages.
 
@@ -64,3 +79,6 @@ components.
   - [ ] Add an LFO
   - [ ] Polyphony (with Envelopes for each!)?
   - [ ] Drop in synth configurations, e.g. a JSON graph describing the modules and settings (modular heaven or hell?)
+
+  - Code
+   - [ ] Eslint is fixed at 5.6.0 although there is a newer release - CRA doesn't like the newer one.

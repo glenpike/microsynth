@@ -24,16 +24,16 @@
     "svg-knob": "^1.7.0"
   },
   "scripts": {
-    "start-js": "react-scripts start",
+    "start-js": "NODE_OPTIONS=--openssl-legacy-provider react-scripts start",
     "dev:start": "npm-run-all -p watch-css start-js test",
     "start": "if-env NODE_ENV=production && npm run glitch:start || npm run dev:start",
     "glitch:start": "static build --gzip",
-    "glitch:build": "react-scripts build && gzip -rk build && refresh",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "glitch:build": "NODE_OPTIONS=--openssl-legacy-provider react-scripts build && gzip -rk build && refresh",
+    "build": "NODE_OPTIONS=--openssl-legacy-provider react-scripts build",
+    "test": "NODE_OPTIONS=--openssl-legacy-provider react-scripts test",
     "eject": "react-scripts eject",
-    "lint": "eslint .",
-    "lintfix": "eslint . --fix",
+    "lint": "NODE_OPTIONS=--openssl-legacy-provider eslint .",
+    "lintfix": "NODE_OPTIONS=--openssl-legacy-provider eslint . --fix",
     "build-css": "sass -I ./src -I ./node_modules src/:src/",
     "watch-css": "npm run build-css && sass -I ./src -I ./node_modules src/:src/ --watch"
   },

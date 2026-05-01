@@ -1,7 +1,10 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
 .VirtualKeyboard {
     text-align: left;
     &__Controls {
-        margin: 0 0 $baseFontSize / 2 0;
+        margin: 0 0 calc($baseFontSize / 2) 0;
         padding: 0;
         line-height: $baseFontSize;
     }
@@ -11,7 +14,7 @@
         border: 1px solid $primaryHueDarker;
         font-size: $baseFontSize * 0.65;
         font-weight: bold;
-        margin-right: $baseFontSize / 4;
+        margin-right: calc($baseFontSize / 4);
         float: left;
     }
     &__Octave {
@@ -20,7 +23,7 @@
         padding: 0 $baseLineHeight * 0.5;
         color: $primaryHue;
         border: 1px solid $primaryHueDarker;
-        margin-right: $baseFontSize / 4;
+        margin-right: calc($baseFontSize / 4);
         float: left;
     }
     &__Arpeggiator {
@@ -35,11 +38,11 @@
         float: left;
         font-size: $baseFontSize * 0.65;
         color: $primaryHue;
-        margin-left: $baseFontSize / 4;
+        margin-left: calc($baseFontSize / 4);
     }
     &__Arpeggiator_Pattern,
     &__Arpeggiator_Number {
-        margin-left: $baseFontSize / 4;
+        margin-left: calc($baseFontSize / 4);
         font-size: $baseFontSize *  0.65;
         padding: 2px 6px 3px;
     }
@@ -51,7 +54,7 @@
     &__Arpeggiator>div {
         font-size: $baseFontSize * 0.65;
         font-weight: bold;
-        margin-left: $baseFontSize / 4;
+        margin-left: calc($baseFontSize / 4);
         float: left;
     }
     &__KeysWrapper {
@@ -67,7 +70,7 @@
         position: relative;
         left: 0;
         transition:left 0.3s linear;
-        font-size: $baseFontSize * 2 / 3;
+        font-size: calc($baseFontSize * 2 / 3);
     }
     &__Key, &__Key--down{
         float: left;

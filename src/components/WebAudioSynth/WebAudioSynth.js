@@ -36,13 +36,20 @@ class WebAudioSynth extends Component {
     controlValues: ImmutablePropTypes.map.isRequired,
   };
 
-  componentWillMount() {
-    this.audioContextResumed = false;
-    this.audioContext = new (window.AudioContext ||
-      window.webkitAudioContext)();
+  constructor(props) {
+    super(props);
+    this.handleUserInteraction = this.handleUserInteraction.bind(this);
+  }
+
+  componentDidMount() {
+    this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
     this.createSynth();
     this.setupControlHandlers();
     this.notesOn = 0;
+
+    document.addEventListener('click', this.handleUserInteraction, true);
+    document.addEventListener('keydown', this.handleUserInteraction, true);
+    document.addEventListener('touchstart', this.handleUserInteraction, true);
   }
 
   componentWillReceiveProps(props) {
@@ -54,8 +61,19 @@ class WebAudioSynth extends Component {
   }
 
   componentWillUnmount() {
+    document.removeEventListener('click', this.handleUserInteraction, true);
+    document.removeEventListener('keydown', this.handleUserInteraction, true);
+    document.removeEventListener('touchstart', this.handleUserInteraction, true);
     this.destroySynth();
-    this.audioContext.close();
+    if (this.audioContext) {
+      this.audioContext.close();
+    }
+  }
+
+  handleUserInteraction() {
+    if (this.audioContext && this.audioContext.state === 'suspended') {
+      this.audioContext.resume().catch(() => {});
+    }
   }
 
   setupOscType(osc, type, pulseWidth) {
@@ -202,10 +220,6 @@ class WebAudioSynth extends Component {
 
     switch (event.type) {
       case NOTE_ON: {
-        if (!this.audioContextResumed) {
-          this.audioContext.resume();
-          this.audioContextResumed = true;
-        }
         const frequency = getPitch(event.noteNum);
         this.osc1.frequency.setValueAtTime(frequency, this.audioContext.currentTime);
         this.osc2.frequency.setValueAtTime(frequency, this.audioContext.currentTime);

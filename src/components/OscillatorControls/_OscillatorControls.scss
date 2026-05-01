@@ -1,3 +1,5 @@
+@use 'variables' as *;
+
 .OscillatorShapes {
-  padding-top: $baseFontSize / 4;
+  padding-top: calc($baseFontSize / 4);
 }

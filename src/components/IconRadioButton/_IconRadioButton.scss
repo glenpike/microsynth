@@ -1,8 +1,11 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
 .IconRadioButton {
     width: 40px;
     height: 40px;
     float: left;
-    margin-right: $baseFontSize / 4;
+    margin-right: calc($baseFontSize / 4);
     &__radio {
         opacity: 0;
         width: 0;
@@ -14,8 +17,8 @@
         width: 100%;
         height: 100%;
 	    display: inline-block;
-        padding: $baseFontSize / 4;
-        border-radius: $baseFontSize / 4;
+        padding: calc($baseFontSize / 4);
+        border-radius: calc($baseFontSize / 4);
         &--checked {
             @include primaryButtonDown;
         }

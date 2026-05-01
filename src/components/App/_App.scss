@@ -1,3 +1,6 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
 .App {
   text-align: left;
 }
@@ -5,8 +8,8 @@
 .App-header {
   @include block;
   background-color: $backgroundColour;
-  border-bottom: $baseFontSize / 4 solid $altBackgroundColour;
-  padding-top: $baseFontSize / 4;
+  border-bottom: calc($baseFontSize / 4) solid $altBackgroundColour;
+  padding-top: calc($baseFontSize / 4);
 }
 
 .App-title {

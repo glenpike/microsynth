@@ -1,0 +1,45 @@
+@use 'variables' as *;
+
+/* ELEMENTS */
+*,
+input[type="search"] {
+  box-sizing: border-box;
+}
+
+html{
+  font: 400 1.5em/1.5 $baseFontFamily;
+}
+
+body {
+  color: $mediumTextColour;
+  background: $veryDarkTextColour;
+  background: linear-gradient(147deg, #0e0e0e 100%, #292426 51%,#0e0e0e 100%)
+}
+
+h1,h2,h3,h4,h5,h6,hgroup,
+ul,ol,dd,
+p,figure,
+pre,table,fieldset,hr{
+  margin-bottom: $baseLineHeight;
+  margin-bottom: 1.5rem;
+}
+
+ul {
+  list-style-type: none;
+}
+
+li {
+  margin-bottom: 0.25rem
+}
+
+/* OBJECTS */
+
+// Need a grid?
+
+.column {
+  float: left;
+}
+
+.pad-left {
+  padding-left: calc($baseFontSize / 2);
+}

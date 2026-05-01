@@ -1,0 +1,41 @@
+@use 'variables' as *;
+
+/* TOOLS */
+
+@mixin block () {
+  margin: calc($baseFontSize / 2);
+  padding: calc($baseFontSize / 2);
+  border: 1px solid $primaryHue;
+}
+
+@mixin preventSelection () {
+  -webkit-touch-callout:none;
+  -webkit-user-select:none;
+  -khtml-user-select:none;
+  -moz-user-select:none;
+  -ms-user-select:none;
+  user-select:none;
+  -webkit-tap-highlight-color:rgba(0,0,0,0);
+}
+
+@mixin primaryButton () {
+  @include preventSelection;
+  margin: 0;
+  padding: 0 calc($baseFontSize / 4);
+  color: $darkTextColour;
+  // box-shadow: 0 0 1px 1px rgba(81, 220, 230, 0.5);
+  background-color: $primaryHue;
+}
+
+@mixin primaryButtonHover () {
+  background-color: $primaryHueDarker;
+}
+@mixin primaryButtonDown () {
+  color: $lightTextColour;
+  background-color: $indicatorColour;
+  // box-shadow: 0 0 1px 1px rgba(240, 81, 107, 0.5);
+}
+
+@mixin backgroundGradient() {
+  background: linear-gradient(135deg, $veryDarkTextColour 0%,$darkTextColour 20%, $mediumTextColour 27%,$darkTextColour 35%,$veryDarkTextColour 100%);
+}
